@@ -1,12 +1,12 @@
 Documentation
 ===============================
-API Url: http://api.youch.me/
-Content-Type: application/json
+API Url: http://api.youch.me/  
+Content-Type: application/json  
 
 Authorization
-http://api.youch.me/oauth2/token
-Method: POST
 -------------------------------
+http://api.youch.me/oauth2/token  
+Method: POST  
 Params:
 ```
 {
