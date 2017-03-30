@@ -3,7 +3,9 @@ Documentation
 API Url: http://api.youch.me/
 Content-Type: application/json
 
-Authorization (url: /oauth2/token)
+Authorization
+http://api.youch.me/oauth2/token
+Method: POST
 -------------------------------
 Params:
 ```
