@@ -45,7 +45,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+                '<controller:[\w-]+>/<action:[\w-]+>'=>'<controller>/<action>',
             ],
         ],
     ],

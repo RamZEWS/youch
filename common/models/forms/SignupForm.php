@@ -32,6 +32,7 @@ class SignupForm extends Model
             ['confirm_password', 'compare', 'compareAttribute' => 'password', 'skipOnEmpty' => false, 'message' => "Passwords don't match"],
             ['email', 'validateEmail'],
             ['username', 'validateUsername'],
+            ['name', 'string']
         ];
     }
 
@@ -45,6 +46,7 @@ class SignupForm extends Model
         if ($this->validate()) {
             $this->user = new User([
                 'username' => $this->username,
+                'name' => $this->name,
                 'email' => $this->email,
                 'status' => User::STATUS_ACTIVE
             ]);
@@ -52,7 +54,7 @@ class SignupForm extends Model
             $this->user->generateAuthKey();
             $this->user->generatePasswordResetToken();
             if ($this->user->save()) {
-                return Yii::$app->user->login($this->user, 3600 * 24 * 30);
+                return $this->getAccessToken($this->user->id);
             }
         }
         return false;
@@ -64,5 +66,11 @@ class SignupForm extends Model
 
     public function validateUsername(){
         return !User::find()->where(['username' => $this->username])->exists();
+    }
+
+    protected function getAccessToken($user_id) {
+        $module = Yii::$app->modules["oauth2"];
+        $server = $module->getServer();
+        return $server->createAccessToken("testclient", $user_id);
     }
 }
