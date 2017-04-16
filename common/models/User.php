@@ -28,6 +28,7 @@ class User extends ActiveRecord implements IdentityInterface, \OAuth2\Storage\Us
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_BANNED = 20;
 
 
     /**
@@ -54,8 +55,11 @@ class User extends ActiveRecord implements IdentityInterface, \OAuth2\Storage\Us
     public function rules()
     {
         return [
+            [['email'], 'unique'],
+            [['name', 'username', 'about'], 'string'],
+            [['city_id', ], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED, self::STATUS_BANNED]],
         ];
     }
 
@@ -191,8 +195,9 @@ class User extends ActiveRecord implements IdentityInterface, \OAuth2\Storage\Us
     {
         /** @var \filsh\yii2\oauth2server\Module $module */
         $module = Yii::$app->getModule('oauth2');
-        $token = $module->getServer()->getResourceController()->getToken();
-        return !empty($token['user_id'])
+        $token = \filsh\yii2\oauth2server\models\OauthAccessTokens::findOne(['access_token' => $token])->getAttributes();
+        //$token = $module->getServer()->getResourceController()->getToken();
+        return isset($token['user_id']) && !empty($token['user_id'])
                     ? static::findIdentity($token['user_id'])
                     : null;
     }
@@ -216,5 +221,10 @@ class User extends ActiveRecord implements IdentityInterface, \OAuth2\Storage\Us
     {
         $user = static::findByUsername($username);
         return ['user_id' => $user->getId()];
+    }
+
+    public function getCity()
+    {
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 }

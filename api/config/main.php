@@ -7,7 +7,15 @@ $params = array_merge(
 $config = [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        [
+            'class' => 'yii\filters\ContentNegotiator',
+            'formats' => [
+                'application/json' => \yii\web\Response::FORMAT_JSON
+            ]
+       ]
+    ],
     'controllerNamespace' => 'api\controllers',
     'components' => [
         'request' => [
@@ -45,7 +53,14 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
-                '<controller:[\w-]+>/<action:[\w-]+>'=>'<controller>/<action>',
+
+                '<controller:[\w-]+>/?'=>'<controller>/index',
+                '<controller:[\w-]+>/<id:\d+>'=>'<controller>/view',
+                '<controller:[\w-]+>/<action:[\w-]+>/?'=>'<controller>/<action>',
+                //['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+                //['class' => 'yii\rest\UrlRule', 'controller' => 'city'],
+                //['class' => 'yii\rest\UrlRule', 'controller' => 'register'],
+                //['class' => 'yii\rest\UrlRule', 'controller' => 'auth'],
             ],
         ],
     ],

@@ -19,38 +19,23 @@ class AuthController extends BaseAuthController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
-                    'actions' => ['registration', 'reset-pass'],
+                    'actions' => ['reset'],
                     'allow' => true,
-                    'roles' => ['?']
+                    'roles' => ['user']
                 ]
             ],
         ];
         $behaviors['verbs'] = [
             'class' => VerbFilter::className(),
             'actions' => [
-                'registration' => ['post'],
-                'reset-pass' => ['post'],
+                'reset' => ['post'],
             ],
         ];
 
         return $behaviors;
     }
 
-    public function actionRegistration() {
-        $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $model = new SignupForm();
-        $model->load($bodyParams, '');
-        if ($model->validate()) {
-            return $model->signup();
-        }
-
-        if (!$user) {
-            throw new ServerErrorHttpException("Пользователь не зарегистрирован");
-        }
-        return $user;
-    }
-
-    public function actionResetPass() {
+    public function actionReset() {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         $model = new ResetPasswordForm();
         $model->load($bodyParams, '');

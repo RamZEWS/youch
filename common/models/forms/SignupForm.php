@@ -10,10 +10,22 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
+    const ROLE_TOURIST = 'tourist';
+    const ROLE_COMPANY = 'company';
+
+    const STEP_1 = 'step1';
+    const STEP_2 = 'step4';
+    const STEP_3 = 'step3';
+    const STEP_4 = 'step2';
+
     public $username;
+    public $name;
     public $email;
     public $password;
     public $confirm_password;
+    public $role;
+    public $city_id;
+    public $about;
 
     private $user;
 
@@ -24,28 +36,34 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'email', 'confirm_password', 'password'], 'required'],
+            // Step 1
+            [['email', 'name', 'confirm_password', 'password', 'role'], 'required', 'on' => self::STEP_1],
             ['email', 'email'],
-            //['username', 'skipOnEmpty' => false],
             ['password', 'string', 'min' => 6],
             ['confirm_password', 'compare', 'compareAttribute' => 'password', 'skipOnEmpty' => false, 'message' => "Passwords don't match"],
-            ['email', 'validateEmail'],
-            ['username', 'validateUsername'],
-            ['name', 'string']
+            ['email', 'unique', 'targetAttribute' => 'email', 'targetClass' => '\common\models\User'],
+            ['name', 'string'],
+            ['role', 'in', 'range' => [self::ROLE_TOURIST, self::ROLE_COMPANY]],
+
+            // Step 2
+            ['username', 'required', 'on' => self::STEP_2],
+            ['username', 'unique', 'targetAttribute' => 'username', 'targetClass' => '\common\models\User'],
+            ['username', 'string'],
+
+            // Step 3
+            ['city_id', 'required', 'on' => self::STEP_3],
+            ['city_id', 'integer'],
+
+            // Step 4
+            ['about', 'required', 'on' => self::STEP_4],
+            ['about', 'string']
         ];
     }
 
-    /**
-     * Logs in a user using the provided username and password.
-     *
-     * @return bool whether the user is logged in successfully
-     */
-    public function signup()
-    {
+    public function step1(){
         if ($this->validate()) {
             $this->user = new User([
-                'username' => $this->username,
+                'username' => $this->email,
                 'name' => $this->name,
                 'email' => $this->email,
                 'status' => User::STATUS_ACTIVE
@@ -54,18 +72,48 @@ class SignupForm extends Model
             $this->user->generateAuthKey();
             $this->user->generatePasswordResetToken();
             if ($this->user->save()) {
+                $auth = Yii::$app->authManager;
+                if($this->role == self::ROLE_COMPANY) {
+                    $role = $auth->getRole('moderator');
+                } else {
+                    $role = $auth->getRole('user');
+                }
+                $auth->assign($role, $this->user->id);
+
                 return $this->getAccessToken($this->user->id);
             }
         }
         return false;
     }
 
-    public function validateEmail(){
-        return !User::find()->where(['email' => $this->email])->exists();
+    public function step2(){
+        if ($this->validate()) {
+            $this->user = Yii::$app->user->identity;
+            $this->user->username = $this->username;
+            $this->user->save();
+            return $this->user;
+        }
+        return false;
     }
 
-    public function validateUsername(){
-        return !User::find()->where(['username' => $this->username])->exists();
+    public function step3(){
+        if ($this->validate()) {
+            $this->user = Yii::$app->user->identity;
+            $this->user->city_id = $this->city_id;
+            $this->user->save();
+            return $this->user;
+        }
+        return false;
+    }
+
+    public function step4(){
+        if ($this->validate()) {
+            $this->user = Yii::$app->user->identity;
+            $this->user->about = $this->about;
+            $this->user->save();
+            return $this->user;
+        }
+        return false;
     }
 
     protected function getAccessToken($user_id) {

@@ -44,7 +44,7 @@ class HttpBearerAuth extends AuthMethod
     {
         $authHeader = $request->getHeaders()->get('Authorization');
         if ($authHeader !== null && preg_match("/^Bearer\\s+(.*?)$/", $authHeader, $matches)) {
-            return $user->loginByAccessToken($matches[1], get_class($this));
+            return $user->loginByAccessToken($matches[1], get_class($user));
         }
         return null;
     }
