@@ -1,13 +1,13 @@
 Documentation
 ===============================
-API Url: http://api.youch.me/
-Content-Type: application/json
+API Url: http://api.youch.me/  
+Content-Type: application/json  
 
 Authorization
 -------------------------------
-http://api.youch.me/oauth2/token
-Method: POST
-Params:
+http://api.youch.me/oauth2/token  
+Method: POST  
+Params:  
 ```
 {
     "grant_type": "password",
@@ -17,7 +17,7 @@ Params:
     "client_secret": "testpass"
 }
 ```
-Answer without errors:
+Answer without errors:  
 ```
 {
     "access_token": "d5bf9c2c22efd84d560adf4cbe4807802efbefa8",
@@ -27,7 +27,7 @@ Answer without errors:
     "refresh_token": "99787116a9a1fa01a24c6be6a14d019108f0de16"
 }
 ```
-Possible errors:
+Possible errors:  
 ```
 {
     "name": "Bad Request"
@@ -64,9 +64,9 @@ Possible errors:
 
 Refresh Token
 -------------------------------
-http://api.youch.me/oauth2/token
-Method: POST
-Params:
+http://api.youch.me/oauth2/token  
+Method: POST  
+Params:  
 ```
 {
     "grant_type": "refresh_token",
@@ -75,7 +75,7 @@ Params:
     "client_secret": "testpass"
 }
 ```
-Answer without errors:
+Answer without errors:  
 ```
 {
     "access_token": "d5bf9c2c22efd84d560adf4cbe4807802efbefa8",
@@ -90,9 +90,9 @@ Registration
 ===============================
 Step 1
 -------------------------------
-http://api.youch.me/register/step1
-Method: POST
-Params:
+http://api.youch.me/register/step1  
+Method: POST  
+Params:  
 ```
 {
     "name": "Last and First names",
@@ -102,7 +102,7 @@ Params:
     "confirm_password": "confirm_password"
 }
 ```
-Answer without errors:
+Answer without errors:  
 ```
 {
     "access_token": "d5bf9c2c22efd84d560adf4cbe4807802efbefa8",
@@ -115,15 +115,15 @@ Answer without errors:
 
 Step 2 (need Authorization header with access_token from step 1)
 -------------------------------
-http://api.youch.me/register/step2
-Method: POST
-Params:
+http://api.youch.me/register/step2  
+Method: POST  
+Params:  
 ```
 {
     "username": "User Login",
 }
 ```
-Answer without errors:
+Answer without errors:  
 ```
 {
     "id": 1,
@@ -143,15 +143,15 @@ Answer without errors:
 
 Step 3 (need Authorization header with access_token from step 1)
 -------------------------------
-http://api.youch.me/register/step3
-Method: POST
-Params:
+http://api.youch.me/register/step3  
+Method: POST  
+Params:  
 ```
 {
     "city_id": city_id,
 }
 ```
-Answer without errors:
+Answer without errors:  
 ```
 {
     "id": 1,
@@ -171,15 +171,15 @@ Answer without errors:
 
 Step 4 (need Authorization header with access_token from step 1)
 -------------------------------
-http://api.youch.me/register/step4
-Method: POST
-Params:
+http://api.youch.me/register/step4  
+Method: POST  
+Params:  
 ```
 {
     "about": "Tell about yourself!",
 }
 ```
-Answer without errors:
+Answer without errors:  
 ```
 {
     "id": 1,
@@ -201,17 +201,99 @@ Password recovery
 ===============================
 Reset pass
 -------------------------------
-http://api.youch.me/auth/reset
-Method: POST
-Params:
+http://api.youch.me/auth/reset  
+Method: POST  
+Params:  
 ```
 {
     "email": "email",
 }
 ```
-Answer without errors:
+Answer without errors:  
 ```
 {
     "msg": "Инструкции по восстановлению пароля отправлены на указанный адрес электронной почты."
+}
+```
+
+User  
+===============================
+Get Profile  
+-------------------------------
+http://api.youch.me/user/profile  
+Method: GET  
+Params: Authorization Header  
+Answer without errors:  
+```
+{
+    "id": 6,
+    "username": "Username",
+    "email": "email@gmail.com",
+    "state": "Активен",
+    "cityname": "Нижний Новгород"
+}
+```
+
+Set Profile  
+-------------------------------
+http://api.youch.me/user/profile  
+Method: POST  
+Params: Authorization Header  
+Answer without errors:  
+```
+{
+    "id": 6,
+    "username": "Username",
+    "email": "email@gmail.com",
+    "state": "Активен",
+    "cityname": "Нижний Новгород"
+}
+```
+
+Cities  
+===============================
+Get Cities  
+-------------------------------
+http://api.youch.me/city  
+Method: GET  
+Answer without errors:  
+```
+[
+    {
+        "id": 1,
+        "name_ru": "Москва",
+        "name_en": "Moscow",
+        "created_at": 1492322947,
+        "updated_at": 1492322947
+    },
+    {
+        "id": 2,
+        "name_ru": "Санкт-Петербург",
+        "name_en": "St.Peterburg",
+        "created_at": 1492322956,
+        "updated_at": 1492322956
+    },
+    {
+        "id": 3,
+        "name_ru": "Нижний Новгород",
+        "name_en": "Nizhniy Novgorod",
+        "created_at": 1492322963,
+        "updated_at": 1492322963
+    }
+]
+```
+
+Get City
+-------------------------------
+http://api.youch.me/city/<city_id>
+Method: GET  
+Answer without errors:  
+```
+{
+    "id": 3,
+    "name_ru": "Нижний Новгород",
+    "name_en": "Nizhniy Novgorod",
+    "created_at": 1492322963,
+    "updated_at": 1492322963
 }
 ```
