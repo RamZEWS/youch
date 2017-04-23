@@ -567,9 +567,9 @@ Answer without errors:
 
 Create Content
 -------------------------------
-http://api.youch.me/content/
+http://api.youch.me/content/  
 Method: POST  
-Answer without errors:  
+Params:  
 ```
 {
     "id": 12,
@@ -583,4 +583,5 @@ Answer without errors:
     "site": "http://yandex.ru/",
     "phone": "89047946559"
 }
-```
+```  
+Answer without errors: Content Object   
