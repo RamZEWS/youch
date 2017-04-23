@@ -317,25 +317,25 @@ Answer without errors:
         "id": 1,
         "user": null,
         "blocked": {
-        "id": 6,
-        "username": "RamZEWS",
-        "email": "ramzes.2007.90@gmail.com",
-        "first_name": "Roman",
-        "last_name": "Lukoyanov",
-        "state": "active",
-        "site": null,
-        "avatar": null,
-        "get_messages": null,
-        "hide_events": null,
-        "birthday": null,
-        "about": "Блондинчик!",
-        "city": {
-            "name": "Брест, Беларусь",
-            "city": "Брест",
-            "google_id": null,
-            "lat": 52,
-            "lng": 23
-        }
+            "id": 6,
+            "username": "RamZEWS",
+            "email": "ramzes.2007.90@gmail.com",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": "Блондинчик!",
+            "city": {
+                "name": "Брест, Беларусь",
+                "city": "Брест",
+                "google_id": null,
+                "lat": 52,
+                "lng": 23
+            }
         },
         "created_at": 1492885673,
         "updated_at": 1492885673
@@ -564,3 +564,23 @@ Answer without errors:
     "updated_at": 1492885673
 }
 ```
+
+Create Content
+-------------------------------
+http://api.youch.me/content/
+Method: POST  
+Answer without errors:  
+```
+{
+    "id": 12,
+    "title": "New Content",
+    "description": "New Desc",
+    "price_from": 200.02,
+    "price_to": 201.02,
+    "is_free": 0,
+    "date_from": "2017-11-12 12:12:12",
+    "date_to": "2017-12-12 12:12:12",
+    "site": "http://yandex.ru/",
+    "phone": "89047946559",
+    "state": "active"
+}

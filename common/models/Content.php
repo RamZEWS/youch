@@ -59,6 +59,8 @@ class Content extends ActiveRecord
             [['is_free', 'user_id', 'city_id', 'status'], 'integer'],
             [['price_from', 'price_to'], 'double'],
             [['date_from', 'date_to'], 'safe'],
+            ['user_id', 'default', 'value' => Yii::$app->user->id],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
         ];
     }
 
