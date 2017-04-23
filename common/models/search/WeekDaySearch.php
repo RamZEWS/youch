@@ -5,12 +5,12 @@ namespace common\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\City;
+use common\models\WeekDay;
 
 /**
- * CitySearch represents the model behind the search form about `common\models\City`.
+ * WeekDaySearch represents the model behind the search form about `common\models\WeekDay`.
  */
-class CitySearch extends City
+class WeekDaySearch extends WeekDay
 {
     /**
      * @inheritdoc
@@ -19,7 +19,7 @@ class CitySearch extends City
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'city'], 'safe'],
+            [['name_ru', 'name_en', 'code'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class CitySearch extends City
      */
     public function search($params)
     {
-        $query = City::find();
+        $query = WeekDay::find();
 
         // add conditions that should always apply here
 
@@ -64,8 +64,9 @@ class CitySearch extends City
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'city', $this->city]);
+        $query->andFilterWhere(['like', 'name_ru', $this->name_ru])
+            ->andFilterWhere(['like', 'name_en', $this->name_en])
+            ->andFilterWhere(['like', 'code', $this->code]);
 
         return $dataProvider;
     }

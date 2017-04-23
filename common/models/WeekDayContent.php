@@ -7,25 +7,22 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * City model
- *
  * @property integer $id
- * @property string $name
- * @property string $city
- * @property string $google_id
- * @property double $lat
- * @property double $lng
+ * @property integer $week_day_id
+ * @property integer $content_id
+ * @property string $from
+ * @property string $to
  * @property integer $created_at
  * @property integer $updated_at
  */
-class City extends ActiveRecord
+class WeekDayContent extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%city}}';
+        return '{{%content_week_day}}';
     }
 
     /**
@@ -44,8 +41,16 @@ class City extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'city', 'google_id'], 'string'],
-            [['lat', 'lng'], 'double']
+            [['week_day_id', 'content_id'], 'integer'],
+            [['from', 'to'], 'string']
         ];
+    }
+
+    public function getDay(){
+        return $this->hasOne(WeekDay::className(), ['id' => 'week_day_id']);
+    }
+
+    public function getContent() {
+        return $this->hasOne(Content::className(), ['id' => 'content_id']);
     }
 }

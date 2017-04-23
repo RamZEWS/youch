@@ -5,6 +5,10 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use api\models\User;
+use api\models\BlackList;
+use common\models\forms\ChangePasswordForm;
+use common\models\forms\ChangeProfileForm;
+use common\models\forms\ChangeProfileAlertsForm;
 
 class UserController extends BaseAuthController {
 
@@ -14,26 +18,30 @@ class UserController extends BaseAuthController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
-                    'actions' => ['profile', 'avatar', 'delete-avatar'],
+                    'actions' => ['profile', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list'],
                     'allow' => true,
                     'roles' => ['@'],
                 ]
+            ],
+        ];
+        $behaviors['verbs'] = [
+            'class' => VerbFilter::className(),
+            'actions' => [
+                'profile' => ['GET'],
+                'black-list' => ['GET'],
+                'avatar' => ['POST'],
+                'delete-avatar' => ['POST'],
+                'change-password' => ['POST'],
+                'change-profile' => ['POST'],
+                'change-alerts' => ['POST'],
             ],
         ];
 
         return $behaviors;
     }
 
-    public function actionProfile()
-    {
-        if (Yii::$app->getRequest()->isGet) {
-            return User::findOne(Yii::$app->user->id);
-        }
-        $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $model = User::findOne(Yii::$app->user->id);
-        $model->load($bodyParams, '');
-        $model->save();
-        return $model;
+    public function actionProfile() {
+        return User::findOne(Yii::$app->user->id);
     }
 
     public function actionAvatar($fileparam)
@@ -58,5 +66,42 @@ class UserController extends BaseAuthController {
         Yii::$app->user->identity->userpic = null;
         Yii::$app->user->identity->save(false);
         return User::findOne(Yii::$app->user->identity->id);*/
+    }
+
+    public function actionChangePassword(){
+        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+        $model = new ChangePasswordForm();
+        $model->load($bodyParams, '');
+        if ($model->validate()) {
+            return $model->changePassword();
+        } else {
+            return $model;
+        }
+    }
+
+    public function actionChangeProfile(){
+        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+        $model = new ChangeProfileForm();
+        $model->load($bodyParams, '');
+        if ($model->validate()) {
+            return $model->changeProfile();
+        } else {
+            return $model;
+        }
+    }
+
+    public function actionChangeAlerts(){
+        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+        $model = new ChangeProfileAlertsForm();
+        $model->load($bodyParams, '');
+        if ($model->validate()) {
+            return $model->changeAlerts();
+        } else {
+            return $model;
+        }
+    }
+
+    public function actionBlackList(){
+        return BlackList::find()->where(['user_id' => Yii::$app->user->id])->select(['id', 'block_id', 'created_at', 'updated_at'])->all();
     }
 }

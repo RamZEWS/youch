@@ -9,6 +9,7 @@ use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
 use filsh\yii2\oauth2server\filters\auth\CompositeAuth;
 use common\models\forms\ResetPasswordForm;
 use common\models\forms\SignupForm;
+use common\models\forms\GoogleCityForm;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
@@ -56,7 +57,7 @@ class RegisterController extends BaseAuthController {
 
     public function actionStep2() {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $model = new SignupForm();
+        $model = new SignupForm(['scenario' => SignupForm::STEP_2]);
         $model->load($bodyParams, '');
         if ($model->validate()) {
             return $model->step2();
@@ -67,10 +68,11 @@ class RegisterController extends BaseAuthController {
 
     public function actionStep3() {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $model = new SignupForm();
+        $model = new GoogleCityForm();
         $model->load($bodyParams, '');
-        if ($model->validate()) {
-            return $model->step3();
+        if ($model->validate() && $city = $model->getOrCreate()) {
+            $signup = new SignupForm(['scenario' => SignupForm::STEP_3, 'city_id' => $city->id]);
+            return $signup->step3();
         } else {
             return $model;
         }
@@ -78,7 +80,7 @@ class RegisterController extends BaseAuthController {
 
     public function actionStep4() {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $model = new SignupForm();
+        $model = new SignupForm(['scenario' => SignupForm::STEP_4]);
         $model->load($bodyParams, '');
         if ($model->validate()) {
             return $model->step4();

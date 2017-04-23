@@ -19,7 +19,8 @@ class SignupForm extends Model
     const STEP_4 = 'step2';
 
     public $username;
-    public $name;
+    public $first_name;
+    public $last_name;
     public $email;
     public $password;
     public $confirm_password;
@@ -37,12 +38,12 @@ class SignupForm extends Model
     {
         return [
             // Step 1
-            [['email', 'name', 'confirm_password', 'password', 'role'], 'required', 'on' => self::STEP_1],
+            [['email', 'first_name', 'last_name', 'confirm_password', 'password', 'role'], 'required', 'on' => self::STEP_1],
             ['email', 'email'],
             ['password', 'string', 'min' => 6],
             ['confirm_password', 'compare', 'compareAttribute' => 'password', 'skipOnEmpty' => false, 'message' => "Passwords don't match"],
             ['email', 'unique', 'targetAttribute' => 'email', 'targetClass' => '\common\models\User'],
-            ['name', 'string'],
+            [['first_name', 'last_name'], 'string'],
             ['role', 'in', 'range' => [self::ROLE_TOURIST, self::ROLE_COMPANY]],
 
             // Step 2
@@ -64,7 +65,8 @@ class SignupForm extends Model
         if ($this->validate()) {
             $this->user = new User([
                 'username' => $this->email,
-                'name' => $this->name,
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
                 'email' => $this->email,
                 'status' => User::STATUS_ACTIVE
             ]);
@@ -83,7 +85,7 @@ class SignupForm extends Model
                 return $this->getAccessToken($this->user->id);
             }
         }
-        return false;
+        return $this;
     }
 
     public function step2(){
@@ -93,7 +95,7 @@ class SignupForm extends Model
             $this->user->save();
             return $this->user;
         }
-        return false;
+        return $this;
     }
 
     public function step3(){
@@ -103,7 +105,7 @@ class SignupForm extends Model
             $this->user->save();
             return $this->user;
         }
-        return false;
+        return $this;
     }
 
     public function step4(){
@@ -113,7 +115,7 @@ class SignupForm extends Model
             $this->user->save();
             return $this->user;
         }
-        return false;
+        return $this;
     }
 
     protected function getAccessToken($user_id) {

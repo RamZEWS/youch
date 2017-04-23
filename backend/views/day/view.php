@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\City */
+/* @var $model common\models\WeekDay */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Cities', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Days', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="city-view">
+<div class="day-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,11 +29,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'name',
-            'city',
-            'google_id',
-            'lat',
-            'lng',
+            'name_ru',
+            'name_en',
+            'code',
             'created_at',
             'updated_at',
         ],

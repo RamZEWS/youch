@@ -7,25 +7,20 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * City model
- *
  * @property integer $id
- * @property string $name
- * @property string $city
- * @property string $google_id
- * @property double $lat
- * @property double $lng
+ * @property integer $user_id
+ * @property integer $block_id
  * @property integer $created_at
  * @property integer $updated_at
  */
-class City extends ActiveRecord
+class BlackList extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%city}}';
+        return '{{%black_list}}';
     }
 
     /**
@@ -44,8 +39,7 @@ class City extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'city', 'google_id'], 'string'],
-            [['lat', 'lng'], 'double']
+            [['user_id', 'block_id'], 'integer']
         ];
     }
 }

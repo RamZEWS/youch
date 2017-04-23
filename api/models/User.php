@@ -7,9 +7,9 @@ use common\models\User as CommonUser;
  */
 class User extends CommonUser {
     public static $statuses = [
-        self::STATUS_DELETED => 'Удален',
-        self::STATUS_ACTIVE => 'Активен',
-        self::STATUS_BANNED => 'Забанен'
+        self::STATUS_DELETED => 'deleted',
+        self::STATUS_ACTIVE => 'active',
+        self::STATUS_BANNED => 'inactive'
     ];
 
     public function fields() {
@@ -17,16 +17,31 @@ class User extends CommonUser {
             'id',
             'username',
             'email',
+            'first_name',
+            'last_name',
             'state',
-            'cityname'
+            'site',
+            'avatar',
+            'get_messages',
+            'hide_events',
+            'birthday',
+            'about',
+            'city'
         ];
     }
 
     public function getState(){
-        return isset(self::$statuses[$this->status]) ? self::$statuses[$this->status] : "Неизвестно";
+        return isset(self::$statuses[$this->status]) ? self::$statuses[$this->status] : "unknown";
     }
 
-    public function getCityname(){
-        return $this->city ? $this->city->name_ru : false;
+    public function getAvatar(){
+        if($this->avatar_url) {
+            return implode('/', [$this->avatar_base_url, $this->avatar_url]);
+        }
+        return null;
+    }
+
+    public function getCity(){
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 }

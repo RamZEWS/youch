@@ -11,11 +11,11 @@ class City extends CommonCity {
 
     public function fields() {
         return [
-            'id',
-            'name_ru',
-            'name_en',
-            'created_at',
-            'updated_at'
+            'name',
+            'city',
+            'google_id',
+            'lat',
+            'lng'
         ];
     }
 }

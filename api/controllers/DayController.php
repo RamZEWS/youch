@@ -6,7 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
-class CityController extends BaseAuthActiveController {
+class DayController extends BaseAuthActiveController {
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['access'] = [
@@ -36,5 +36,5 @@ class CityController extends BaseAuthActiveController {
         return $behaviors;
     }
 
-    public $modelClass = 'api\models\City';
+    public $modelClass = 'api\models\WeekDay';
 }

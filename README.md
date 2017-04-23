@@ -97,7 +97,7 @@ Params:
 {
     "name": "Last and First names",
     "email": "email",
-    "type": "tourist | company"
+    "role": "tourist | company"
     "password": "password",
     "confirm_password": "confirm_password"
 }
@@ -135,7 +135,8 @@ Answer without errors:
     "status": 10,
     "created_at": 1492259103,
     "updated_at": 1492260639,
-    "name": "Roman Lukoyanov",
+    "first_name": "Roman",
+    "last_name": "Lukoyanov",
     "about": null,
     "city_id": null
 }
@@ -148,8 +149,12 @@ Method: POST
 Params:  
 ```
 {
-    "city_id": city_id,
-}
+    "name":"Нижний Новгород, Россия",
+    "city":"Нижний Новгород",
+    "id":"asdashfakjslhfakjslhf",
+    "lat":52.3,
+    "long":26.5
+}   
 ```
 Answer without errors:  
 ```
@@ -216,9 +221,9 @@ Answer without errors:
 }
 ```
 
-User  
+User Profile  
 ===============================
-Get Profile  
+Get profile  
 -------------------------------
 http://api.youch.me/user/profile  
 Method: GET  
@@ -226,29 +231,138 @@ Params: Authorization Header
 Answer without errors:  
 ```
 {
-    "id": 6,
-    "username": "Username",
-    "email": "email@gmail.com",
-    "state": "Активен",
-    "cityname": "Нижний Новгород"
+    "id": 2,
+    "username": "admin",
+    "email": "admin@youch.me",
+    "first_name": "Roman",
+    "last_name": "Lukoyanov",
+    "state": "active",
+    "site": "http://youch.me/",
+    "avatar": null,
+    "get_messages": null,
+    "hide_events": null,
+    "birthday": "1990-10-28",
+    "about": "Romashka!!!",
+    "city": {
+        "name": "Нижний Новгород, Россия",
+        "city": "Нижний Новгород",
+        "google_id": "asdashfakjslhfakjslhf",
+        "lat": 52.3,
+        "lng": 26.5
+    }
 }
 ```
 
-Set Profile  
+Change personal settings  
 -------------------------------
-http://api.youch.me/user/profile  
+http://api.youch.me/user/change-profile  
 Method: POST  
+Params: Authorization Header  
+```
+{
+    "email": "admin@youch.me",
+    "username": "admin",
+    "site": "http://youch.me/",
+    "first_name": "Roman",
+    "last_name": "Lukoyanov",
+    "birthday": "1990-10-28",
+    "about": "Romashka!!!",
+    "city": {
+        "name":"Нижний Новгород, Россия",
+        "city":"Нижний Новгород",
+        "id":"asdashfakjslhfakjslhf",
+        "lat":52.3,
+        "long":26.5
+    }
+}
+```
+Answer without errors: User object 
+
+Change password  
+-------------------------------
+http://api.youch.me/user/change-password  
+Method: POST  
+Params: Authorization Header  
+```
+{
+    "old_password": "old_password",
+    "password": "new_password",
+    "confirm_password": "confirm_new_password"
+}
+```
+Answer without errors: User object  
+
+Change notifications  
+-------------------------------
+http://api.youch.me/user/change-alerts  
+Method: POST  
+Params: Authorization Header  
+```
+{
+    "get_messages": true,
+    "hide_events": false
+}
+```
+Answer without errors: User object  
+
+Get black list  
+-------------------------------
+http://api.youch.me/user/black-list  
+Method: GET  
 Params: Authorization Header  
 Answer without errors:  
 ```
-{
-    "id": 6,
-    "username": "Username",
-    "email": "email@gmail.com",
-    "state": "Активен",
-    "cityname": "Нижний Новгород"
-}
-```
+[
+    {
+        "id": 1,
+        "user": null,
+        "blocked": {
+        "id": 6,
+        "username": "RamZEWS",
+        "email": "ramzes.2007.90@gmail.com",
+        "first_name": "Roman",
+        "last_name": "Lukoyanov",
+        "state": "active",
+        "site": null,
+        "avatar": null,
+        "get_messages": null,
+        "hide_events": null,
+        "birthday": null,
+        "about": "Блондинчик!",
+        "city": {
+            "name": "Брест, Беларусь",
+            "city": "Брест",
+            "google_id": null,
+            "lat": 52,
+            "lng": 23
+        }
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    },
+    {
+        "id": 2,
+        "user": null,
+        "blocked": {
+            "id": 4,
+            "username": "user",
+            "email": "user@youch.me",
+            "first_name": null,
+            "last_name": null,
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": null,
+            "city": null
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```  
 
 Cities  
 ===============================
@@ -260,25 +374,18 @@ Answer without errors:
 ```
 [
     {
-        "id": 1,
-        "name_ru": "Москва",
-        "name_en": "Moscow",
-        "created_at": 1492322947,
-        "updated_at": 1492322947
+        "name": "Брест, Беларусь",
+        "city": "Брест",
+        "google_id": "dasdaskalkshkaj",
+        "lat": 52,
+        "lng": 23
     },
     {
-        "id": 2,
-        "name_ru": "Санкт-Петербург",
-        "name_en": "St.Peterburg",
-        "created_at": 1492322956,
-        "updated_at": 1492322956
-    },
-    {
-        "id": 3,
-        "name_ru": "Нижний Новгород",
-        "name_en": "Nizhniy Novgorod",
-        "created_at": 1492322963,
-        "updated_at": 1492322963
+        "name": "Нижний Новгород, Россия",
+        "city": "Нижний Новгород",
+        "google_id": "asdashfakjslhfakjslhf",
+        "lat": 52.3,
+        "lng": 26.5
     }
 ]
 ```
@@ -290,10 +397,170 @@ Method: GET
 Answer without errors:  
 ```
 {
-    "id": 3,
-    "name_ru": "Нижний Новгород",
-    "name_en": "Nizhniy Novgorod",
-    "created_at": 1492322963,
-    "updated_at": 1492322963
+    "name": "Нижний Новгород, Россия",
+    "city": "Нижний Новгород",
+    "google_id": "asdashfakjslhfakjslhf",
+    "lat": 52.3,
+    "lng": 26.5
+}
+```
+
+Content  
+===============================
+Get Content List  
+-------------------------------
+http://api.youch.me/content  
+Method: GET  
+Answer without errors:  
+```
+[
+    {
+        "id": 12,
+        "title": "New Content",
+        "description": "New Desc",
+        "user": {
+            "id": 2,
+            "username": "admin",
+            "email": "admin@youch.me",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": "http://youch.me/",
+            "avatar": null,
+            "get_messages": 1,
+            "hide_events": 0,
+            "birthday": "1990-10-28",
+            "about": "Romashka!!!",
+            "city": {
+                "name": "Нижний Новгород, Россия",
+                "city": "Нижний Новгород",
+                "google_id": "asdashfakjslhfakjslhf",
+                "lat": 52.3,
+                "lng": 26.5
+            }
+        },
+        "categories": [
+            {
+                "id": 1,
+                "name_ru": "Туризм",
+                "name_en": "Tourism",
+                "created_at": 1492885673,
+                "updated_at": 1492885673
+            },
+            {
+                "id": 2,
+                "name_ru": "Европа",
+                "name_en": "Europe",
+                "created_at": 1492885673,
+                "updated_at": 1492885673
+            }
+        ],
+        "days": {
+            "mon": {
+                "from": "09:00",
+                "to": "21:00"
+            },
+            "tue": {
+                "from": "09:00",
+                "to": "21:00"
+            }
+        },
+        "price_from": 200.02,
+        "price_to": 201.02,
+        "is_free": 0,
+        "date_from": "2017-11-12 12:12:12",
+        "date_to": "2017-12-12 12:12:12",
+        "site": "http://yandex.ru/",
+        "phone": "89047946559",
+        "city": {
+            "name": "Брест, Беларусь",
+            "city": "Брест",
+            "google_id": null,
+            "lat": 52,
+            "lng": 23
+        },
+        "state": "active",
+        "file": null,
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```
+
+Get Content
+-------------------------------
+http://api.youch.me/content/<content_id>
+Method: GET  
+Answer without errors:  
+```
+{
+    "id": 12,
+    "title": "New Content",
+    "description": "New Desc",
+    "user": {
+        "id": 2,
+        "username": "admin",
+        "email": "admin@youch.me",
+        "first_name": "Roman",
+        "last_name": "Lukoyanov",
+        "state": "active",
+        "site": "http://youch.me/",
+        "avatar": null,
+        "get_messages": 1,
+        "hide_events": 0,
+        "birthday": "1990-10-28",
+        "about": "Romashka!!!",
+        "city": {
+            "name": "Нижний Новгород, Россия",
+            "city": "Нижний Новгород",
+            "google_id": "asdashfakjslhfakjslhf",
+            "lat": 52.3,
+            "lng": 26.5
+        }
+    },
+    "categories": [
+        {
+            "id": 1,
+            "name_ru": "Туризм",
+            "name_en": "Tourism",
+            "created_at": 1492885673,
+            "updated_at": 1492885673
+        },
+        {
+            "id": 2,
+            "name_ru": "Европа",
+            "name_en": "Europe",
+            "created_at": 1492885673,
+            "updated_at": 1492885673
+        }
+    ],
+    "days": {
+        "mon": {
+            "from": "09:00",
+            "to": "21:00"
+        },
+        "tue": {
+            "from": "09:00",
+            "to": "21:00"
+        }
+    },
+    "price_from": 200.02,
+    "price_to": 201.02,
+    "is_free": 0,
+    "date_from": "2017-11-12 12:12:12",
+    "date_to": "2017-12-12 12:12:12",
+    "site": "http://yandex.ru/",
+    "phone": "89047946559",
+    "city": {
+        "name": "Брест, Беларусь",
+        "city": "Брест",
+        "google_id": null,
+        "lat": 52,
+        "lng": 23
+    },
+    "state": "active",
+    "file": null,
+    "created_at": 1492885673,
+    "updated_at": 1492885673
 }
 ```

@@ -12,7 +12,8 @@ use yii\web\IdentityInterface;
  *
  * @property integer $id
  * @property string $username
- * @property string $name
+ * @property string $first_name
+ * @property string $last_name
  * @property text $about
  * @property integer $city_id
  * @property string $password_hash
@@ -20,6 +21,12 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $auth_key
  * @property integer $status
+ * @property string $avatar_base_url
+ * @property string $avatar_url
+ * @property string $site
+ * @property datetime $birthday
+ * @property integer $get_messages
+ * @property integer $hide_events
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
@@ -56,8 +63,9 @@ class User extends ActiveRecord implements IdentityInterface, \OAuth2\Storage\Us
     {
         return [
             [['email'], 'unique'],
-            [['name', 'username', 'about'], 'string'],
-            [['city_id', ], 'integer'],
+            [['first_name', 'last_name', 'username', 'about', 'avatar_base_url', 'avatar_url', 'site'], 'string'],
+            [['city_id', 'get_messages', 'hide_events'], 'integer'],
+            [['birthday'], 'safe'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED, self::STATUS_BANNED]],
         ];

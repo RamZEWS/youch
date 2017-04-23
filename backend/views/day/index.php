@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\search\CitySearch */
+/* @var $searchModel common\models\search\WeekDaySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Cities';
+$this->title = 'Days';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="city-index">
+<div class="day-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create City', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Day', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -25,11 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'name',
-            'city',
-            'google_id',
-            'lat',
-            'lng',
+            'name_ru',
+            'name_en',
+            'code',
             'created_at',
             'updated_at',
 

@@ -6,7 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
-class CityController extends BaseAuthActiveController {
+class ContentController extends BaseAuthActiveController {
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['access'] = [
@@ -17,7 +17,12 @@ class CityController extends BaseAuthActiveController {
                     'allow' => true
                 ],
                 [
-                    'actions' => ['create', 'delete', 'update'],
+                    'actions' => ['create', 'update'],
+                    'allow' => true,
+                    'roles' => ['@']
+                ],
+                [
+                    'actions' => ['delete'],
                     'allow' => true,
                     'roles' => ['admin']
                 ],
@@ -36,5 +41,5 @@ class CityController extends BaseAuthActiveController {
         return $behaviors;
     }
 
-    public $modelClass = 'api\models\City';
+    public $modelClass = 'api\models\Content';
 }

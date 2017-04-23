@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\search\CitySearch */
+/* @var $model common\models\search\WeekDaySearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="city-search">
+<div class="day-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,15 +17,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'name') ?>
+    <?= $form->field($model, 'name_ru') ?>
 
-    <?= $form->field($model, 'city') ?>
+    <?= $form->field($model, 'name_en') ?>
 
-    <?= $form->field($model, 'google_id') ?>
-
-    <?= $form->field($model, 'lat') ?>
-
-    <?= $form->field($model, 'lng') ?>
+    <?= $form->field($model, 'code') ?>
 
     <?= $form->field($model, 'created_at') ?>
 
