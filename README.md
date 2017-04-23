@@ -581,6 +581,5 @@ Answer without errors:
     "date_from": "2017-11-12 12:12:12",
     "date_to": "2017-12-12 12:12:12",
     "site": "http://yandex.ru/",
-    "phone": "89047946559",
-    "state": "active"
+    "phone": "89047946559"
 }
