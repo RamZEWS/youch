@@ -485,6 +485,31 @@ Answer without errors:
 ]
 ```  
 
+Set avatar  
+-------------------------------
+http://api.youch.me/user/avatar  
+Method: POST  
+Params: 
+```
+{
+    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA..."
+}
+```  
+Answer without errors: User object  
+
+Remove avatar  
+-------------------------------
+http://api.youch.me/user/delete-avatar  
+Method: POST  
+Params: 
+```
+{
+    
+}
+```  
+Answer without errors: User object 
+
+
 Remove profile
 -------------------------------
 http://api.youch.me/user/delete  
