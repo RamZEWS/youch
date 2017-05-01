@@ -367,6 +367,124 @@ Answer without errors:
 ]
 ```  
 
+Get followers  
+-------------------------------
+http://api.youch.me/user/followers  
+Method: GET  
+Params: Authorization Header  
+Answer without errors:  
+```
+[
+    {
+        "id": 1,
+        "follower": null,
+        "user": {
+            "id": 6,
+            "username": "RamZEWS",
+            "email": "ramzes.2007.90@gmail.com",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": "Блондинчик!",
+            "city": {
+                "name": "Брест, Беларусь",
+                "city": "Брест",
+                "google_id": null,
+                "lat": 52,
+                "lng": 23
+            }
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    },
+    {
+        "id": 2,
+        "follower": null,
+        "user": {
+            "id": 4,
+            "username": "user",
+            "email": "user@youch.me",
+            "first_name": null,
+            "last_name": null,
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": null,
+            "city": null
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```  
+
+Get followings  
+-------------------------------
+http://api.youch.me/user/followings  
+Method: GET  
+Params: Authorization Header  
+Answer without errors:  
+```
+[
+    {
+        "id": 1,
+        "user": null,
+        "follower": {
+            "id": 6,
+            "username": "RamZEWS",
+            "email": "ramzes.2007.90@gmail.com",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": "Блондинчик!",
+            "city": {
+                "name": "Брест, Беларусь",
+                "city": "Брест",
+                "google_id": null,
+                "lat": 52,
+                "lng": 23
+            }
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    },
+    {
+        "id": 2,
+        "user": null,
+        "blocked": {
+            "id": 4,
+            "username": "user",
+            "email": "user@youch.me",
+            "first_name": null,
+            "last_name": null,
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": null,
+            "city": null
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```  
+
 Remove profile
 -------------------------------
 http://api.youch.me/user/delete  

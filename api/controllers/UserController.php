@@ -6,6 +6,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use api\models\User;
 use api\models\BlackList;
+use api\models\UserSubscription;
 use common\models\forms\ChangePasswordForm;
 use common\models\forms\ChangeProfileForm;
 use common\models\forms\ChangeProfileAlertsForm;
@@ -127,7 +128,7 @@ class UserController extends BaseAuthController {
         return UserSubscription::find()->where(['follower_id' => Yii::$app->user->id])->select(['id', 'user_id', 'created_at', 'updated_at'])->all();
     }
 
-    public function actionFollowing(){
+    public function actionFollowings(){
         return UserSubscription::find()->where(['user_id' => Yii::$app->user->id])->select(['id', 'follower_id', 'created_at', 'updated_at'])->all();
     }
 
