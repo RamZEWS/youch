@@ -17,6 +17,7 @@ class Content extends CommonContent {
             'title',
             'description',
             'user',
+            'rating',
             'categories',
             'days',
             'price_from',
@@ -29,6 +30,7 @@ class Content extends CommonContent {
             'city',
             'state',
             'file',
+            'counts',
             'created_at',
             'updated_at'
         ];
@@ -56,5 +58,12 @@ class Content extends CommonContent {
 
     public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getCounts(){
+        return [
+            'ratings' => ContentRating::find()->where(['content_id' => $this->id])->count(),
+            'comments' => ContentComment::find()->where(['content_id' => $this->id])->count(),
+        ];
     }
 }

@@ -21,8 +21,7 @@ class RegisterController extends BaseAuthController {
             'rules' => [
                 [
                     'actions' => ['step1'],
-                    'allow' => true,
-                    'roles' => ['?']
+                    'allow' => true
                 ],
                 [
                     'actions' => ['step2', 'step3', 'step4'],

@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
  * @property text $description
  * @property integer $status
  * @property integer $user_id
+ * @property double $rating
  * @property double $price_from
  * @property double $price_to
  * @property integer $is_free
@@ -57,7 +58,7 @@ class Content extends ActiveRecord
         return [
             [['title', 'description', 'site', 'phone', 'file_base_url', 'file_url'], 'string'],
             [['is_free', 'user_id', 'city_id', 'status'], 'integer'],
-            [['price_from', 'price_to'], 'double'],
+            [['price_from', 'price_to', 'rating'], 'double'],
             [['date_from', 'date_to'], 'safe'],
             ['user_id', 'default', 'value' => Yii::$app->user->id],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -78,7 +79,7 @@ class Content extends ActiveRecord
 
     public function getFile(){
         if($this->file_base_url) {
-            return implode('/', [$this->file_base_url, $this->file_url]);
+            return implode('', [getenv('API_URL'), $this->file_base_url, $this->file_url]);
         }
         return null;
     }

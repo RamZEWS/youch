@@ -9,6 +9,7 @@ use api\models\BlackList;
 use common\models\forms\ChangePasswordForm;
 use common\models\forms\ChangeProfileForm;
 use common\models\forms\ChangeProfileAlertsForm;
+use common\models\forms\ImageBase64Form;
 
 class UserController extends BaseAuthController {
 
@@ -18,7 +19,7 @@ class UserController extends BaseAuthController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
-                    'actions' => ['profile', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list'],
+                    'actions' => ['profile', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete'],
                     'allow' => true,
                     'roles' => ['@'],
                 ]
@@ -29,11 +30,14 @@ class UserController extends BaseAuthController {
             'actions' => [
                 'profile' => ['GET'],
                 'black-list' => ['GET'],
+                'followers' => ['GET'],
+                'followings' => ['GET'],
                 'avatar' => ['POST'],
                 'delete-avatar' => ['POST'],
                 'change-password' => ['POST'],
                 'change-profile' => ['POST'],
                 'change-alerts' => ['POST'],
+                'delete' => ['DELETE']
             ],
         ];
 
@@ -44,28 +48,42 @@ class UserController extends BaseAuthController {
         return User::findOne(Yii::$app->user->id);
     }
 
-    public function actionAvatar($fileparam)
+    public function actionAvatar()
     {
-        /*$file = \yii\web\UploadedFile::getInstanceByName($fileparam);
-        if (!$file || !$file->size || $file->error) {
-            return 'Error: Upload error';
+        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+        $model = new ImageBase64Form([
+            'base64string' => $bodyParams['image'],
+            'field' => 'image'
+        ]);
+        $image = $model->saveImage('/upload/users/');
+        if(!$image) {
+            return $model;
+        } else {
+            $this->deleteAvatar();
+            $identity = Yii::$app->user->identity;
+            $identity->avatar_base_url = $image['base_url'];
+            $identity->avatar_url = $image['file_name'];
+            if($identity->save()) {
+                return User::findOne(Yii::$app->user->id);
+            }
         }
-        if (!in_array($file->type, array('image/jpeg', 'image/png'))) {
-            return 'Error: Invalid file type';
-        }
-        Yii::$app->user->identity->userpic = Yii::$app->fileStorage->save($file);
-        Yii::$app->user->identity->save(false);
-        return User::findOne(Yii::$app->user->identity->id);*/
     }
 
     public function actionDeleteAvatar($userpic)
     {
-        /*if (!Yii::$app->fileStorage->delete($userpic)) {
-            throw new HttpException(400);
+        $this->deleteAvatar();
+        Yii::$app->user->identity->avatar_base_url = null;
+        Yii::$app->user->identity->avatar_url = null;
+        Yii::$app->user->identity->save();
+        return User::findOne(Yii::$app->user->id);
+    }
+
+    private function deleteAvatar(){
+        $identity = Yii::$app->user->identity;
+        $filepath = implode('', [$_SERVER['DOCUMENT_ROOT'], $identity->avatar_base_url, $identity->avatar_url]);
+        if (file_exists($filepath)) {
+            unlink($filepath);
         }
-        Yii::$app->user->identity->userpic = null;
-        Yii::$app->user->identity->save(false);
-        return User::findOne(Yii::$app->user->identity->id);*/
     }
 
     public function actionChangePassword(){
@@ -104,4 +122,18 @@ class UserController extends BaseAuthController {
     public function actionBlackList(){
         return BlackList::find()->where(['user_id' => Yii::$app->user->id])->select(['id', 'block_id', 'created_at', 'updated_at'])->all();
     }
+
+    public function actionFollowers(){
+        return UserSubscription::find()->where(['follower_id' => Yii::$app->user->id])->select(['id', 'user_id', 'created_at', 'updated_at'])->all();
+    }
+
+    public function actionFollowing(){
+        return UserSubscription::find()->where(['user_id' => Yii::$app->user->id])->select(['id', 'follower_id', 'created_at', 'updated_at'])->all();
+    }
+
+    public function actionDelete(){
+        $user = User::findOne(Yii::$app->user->id);
+        return $user->delete();
+    }
+
 }

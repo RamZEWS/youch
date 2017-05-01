@@ -3,6 +3,8 @@ Documentation
 API Url: http://api.youch.me/  
 Content-Type: application/json  
 
+[TOC]
+
 Authorization
 -------------------------------
 http://api.youch.me/oauth2/token  
@@ -95,7 +97,8 @@ Method: POST
 Params:  
 ```
 {
-    "name": "Last and First names",
+    "first_name": "First names",
+    "last_name": "Last name",
     "email": "email",
     "role": "tourist | company"
     "password": "password",
@@ -364,6 +367,13 @@ Answer without errors:
 ]
 ```  
 
+Remove profile
+-------------------------------
+http://api.youch.me/user/delete  
+Method: DELETE  
+Params: Authorization Header  
+Answer without errors:  true | false
+
 Cities  
 ===============================
 Get Cities  
@@ -392,7 +402,7 @@ Answer without errors:
 
 Get City
 -------------------------------
-http://api.youch.me/city/<city_id>
+http://api.youch.me/city/<city_id>  
 Method: GET  
 Answer without errors:  
 ```
@@ -567,21 +577,177 @@ Answer without errors:
 
 Create Content
 -------------------------------
-http://api.youch.me/content/  
+http://api.youch.me/content/save  
 Method: POST  
 Params:  
 ```
 {
-    "id": 12,
-    "title": "New Content",
-    "description": "New Desc",
-    "price_from": 200.02,
-    "price_to": 201.02,
+    "title": "Pass2",
+    "description": "ALALA!2",
+    "price_from": 10.05,
+    "price_to": 205.5,
     "is_free": 0,
-    "date_from": "2017-11-12 12:12:12",
-    "date_to": "2017-12-12 12:12:12",
-    "site": "http://yandex.ru/",
-    "phone": "89047946559"
+    "date_from": "2017-04-12",
+    "date_to": "2017-05-20",
+    "site": "http://site.com/",
+    "phone": "9047946559",
+    "city": {
+        "city": "Брест",
+        "name": "Брест, Беларусь",
+        "lat": 52,
+        "long": 23,
+        "id": "dasndashdkjashd"
+    },
+    "category_ids": [2],
+    "hours": {
+        "mon": {
+            "from": "09:00",
+            "to": "21:00"
+        },
+        "tue": {
+            "from": "09:30",
+            "to": "21:30"
+        },
+        "wed": {
+            "from": "10:00",
+            "to": "22:00"
+        }
+    },
+    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA..."
 }
 ```  
-Answer without errors: Content Object   
+Answer without errors: Content Object  
+
+Update Content
+-------------------------------
+http://api.youch.me/content/save  
+Method: POST  
+Params:  
+```
+{
+    "id": 14,
+    "title": "Pass2",
+    "description": "ALALA!2",
+    "price_from": 10.05,
+    "price_to": 205.5,
+    "is_free": 0,
+    "date_from": "2017-04-12",
+    "date_to": "2017-05-20",
+    "site": "http://site.com/",
+    "phone": "9047946559",
+    "city": {
+        "city": "Брест",
+        "name": "Брест, Беларусь",
+        "lat": 52,
+        "long": 23,
+        "id": "dasndashdkjashd"
+    },
+    "category_ids": [2],
+    "hours": {
+        "mon": {
+            "from": "09:00",
+            "to": "21:00"
+        },
+        "tue": {
+            "from": "09:30",
+            "to": "21:30"
+        },
+        "wed": {
+            "from": "10:00",
+            "to": "22:00"
+        }
+    },
+    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA..."
+}
+```  
+Answer without errors: Content Object  
+
+Get Comments
+-------------------------------
+http://api.youch.me/content/get-comments?id=<content_id>  
+Method: GET  
+Params:  
+```
+{
+
+}
+```  
+Answer without errors: Content comment list
+
+Add Comment
+-------------------------------
+http://api.youch.me/content/add-comment  
+Method: POST  
+Params:  
+```
+{
+    "content_id": 14,
+    "comment": "ALALALALA!"
+}
+```  
+Answer without errors: Content comment list    
+
+Add Mark
+-------------------------------
+http://api.youch.me/content/add-mark  
+Method: POST  
+Params:  
+```
+{
+    "content_id": 14,
+    "rating": 3
+}
+```  
+Answer without errors: Content Object  
+
+Black List  
+==============================
+Add to blocked
+------------------------------
+http://api.youch.me/subscription/block  
+Method: POST  
+Params:  
+```
+{
+    "user_id": 6
+}
+```  
+Answer without errors: your blocked list  
+
+Remove from blocked
+------------------------------
+http://api.youch.me/subscription/remove-block  
+Method: POST  
+Params:  
+```
+{
+    "user_id": 6
+}
+```  
+Answer without errors: your blocked list  
+
+Followers
+==============================
+Add to following
+-------------------------------
+http://api.youch.me/subscription/follow   
+Method: POST  
+Params:  
+```
+{
+    "user_id": 6
+}
+```  
+Answer without errors: your following list  
+
+Remove from following
+-------------------------------
+http://api.youch.me/subscription/remove-follow  
+Method: POST  
+Params:  
+```
+{
+    "user_id": 6
+}
+```  
+Answer without errors: your following list  

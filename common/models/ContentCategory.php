@@ -42,4 +42,12 @@ class ContentCategory extends ActiveRecord
             [['category_id', 'content_id'], 'integer']
         ];
     }
+
+    public function getContent() {
+        return $this->hasOne(Content::className(), ['id' => 'content_id']);
+    }
+
+    public function getCategory() {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
 }

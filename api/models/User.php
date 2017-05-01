@@ -26,7 +26,8 @@ class User extends CommonUser {
             'hide_events',
             'birthday',
             'about',
-            'city'
+            'city',
+            'counts'
         ];
     }
 
@@ -43,5 +44,13 @@ class User extends CommonUser {
 
     public function getCity(){
         return $this->hasOne(City::className(), ['id' => 'city_id']);
+    }
+
+    public function getCounts(){
+        return [
+            'content' => Content::find()->where(['user_id' => $this->id])->count(),
+            'followers' => UserSubscription::find()->where(['follower_id' => $this->id])->count(),
+            'comments' => ContentComment::find()->where(['user_id' => $this->id])->count(),
+        ];
     }
 }

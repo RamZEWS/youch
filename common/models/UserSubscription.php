@@ -9,18 +9,18 @@ use yii\db\ActiveRecord;
 /**
  * @property integer $id
  * @property integer $user_id
- * @property integer $block_id
+ * @property integer $follower_id
  * @property integer $created_at
  * @property integer $updated_at
  */
-class BlackList extends ActiveRecord
+class UserSubscription extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%black_list}}';
+        return '{{%user_subscription}}';
     }
 
     /**
@@ -39,7 +39,7 @@ class BlackList extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'block_id'], 'integer'],
+            [['user_id', 'follower_id'], 'integer'],
             [['user_id'], 'default', 'value' => Yii::$app->user->id]
         ];
     }
@@ -48,7 +48,7 @@ class BlackList extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getBlocked(){
-        return $this->hasOne(User::className(), ['id' => 'block_id']);
+    public function getFollower(){
+        return $this->hasOne(User::className(), ['id' => 'follower_id']);
     }
 }
