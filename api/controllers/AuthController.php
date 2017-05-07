@@ -20,8 +20,7 @@ class AuthController extends BaseAuthController {
             'rules' => [
                 [
                     'actions' => ['reset'],
-                    'allow' => true,
-                    'roles' => ['user']
+                    'allow' => true
                 ]
             ],
         ];
@@ -47,6 +46,6 @@ class AuthController extends BaseAuthController {
                 throw new \yii\web\ServerErrorHttpException("Инструкция не выслана.");
             }
         }
-        return ["msg" => "Инструкции по восстановлению пароля отправлены на указанный адрес электронной почты."];
+        return ["msg" => "Instructions was sent to the email."];
     }
 }

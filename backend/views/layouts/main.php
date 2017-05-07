@@ -41,6 +41,11 @@ AppAsset::register($this);
     if (Yii::$app->user->can('admin')) {
         $menuItems[] = ['label' => 'Cities', 'url' => ['/city/']];
         $menuItems[] = ['label' => 'Days', 'url' => ['/day/']];
+        $menuItems[] = ['label' => 'Categories', 'url' => ['/category/']];
+        $menuItems[] = ['label' => 'Content', 'url' => ['/content/']];
+        $menuItems[] = ['label' => 'User', 'url' => ['/user/']];
+        $menuItems[] = ['label' => 'Black List', 'url' => ['/black-list/']];
+        $menuItems[] = ['label' => 'Followers', 'url' => ['/user-subscription/']];
     }
 
     if (Yii::$app->user->isGuest) {

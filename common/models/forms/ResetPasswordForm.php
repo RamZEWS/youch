@@ -39,7 +39,7 @@ class ResetPasswordForm extends Model
                 ->send();
             return true;
         } else {
-            $this->addError('email', 'Пользователь не найден или неактивен.');
+            $this->addError('email', 'User is not found or inactive');
         }
         return false;
     }

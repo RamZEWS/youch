@@ -31,6 +31,13 @@ class User extends CommonUser {
         ];
     }
 
+    public function __get($name) {
+        if(in_array($name, ['get_messages', 'hide_events'])){
+            return (bool)$this->getAttribute($name);
+        }
+        return parent::__get($name);
+    }
+
     public function getState(){
         return isset(self::$statuses[$this->status]) ? self::$statuses[$this->status] : "unknown";
     }
@@ -50,6 +57,7 @@ class User extends CommonUser {
         return [
             'content' => Content::find()->where(['user_id' => $this->id])->count(),
             'followers' => UserSubscription::find()->where(['follower_id' => $this->id])->count(),
+            'followings' => UserSubscription::find()->where(['user_id' => $this->id])->count(),
             'comments' => ContentComment::find()->where(['user_id' => $this->id])->count(),
         ];
     }

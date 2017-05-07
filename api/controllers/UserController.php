@@ -20,6 +20,10 @@ class UserController extends BaseAuthController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
+                    'actions' => ['get'],
+                    'allow' => true,
+                ],
+                [
                     'actions' => ['profile', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete'],
                     'allow' => true,
                     'roles' => ['@'],
@@ -30,6 +34,7 @@ class UserController extends BaseAuthController {
             'class' => VerbFilter::className(),
             'actions' => [
                 'profile' => ['GET'],
+                'get' => ['GET'],
                 'black-list' => ['GET'],
                 'followers' => ['GET'],
                 'followings' => ['GET'],
@@ -135,6 +140,11 @@ class UserController extends BaseAuthController {
     public function actionDelete(){
         $user = User::findOne(Yii::$app->user->id);
         return $user->delete();
+    }
+
+    public function actionGet($id){
+        $user = User::find()->where(['username' => $id])->one();
+        return $user;
     }
 
 }
