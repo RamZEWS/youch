@@ -203,7 +203,10 @@ class User extends ActiveRecord implements IdentityInterface, \OAuth2\Storage\Us
     {
         /** @var \filsh\yii2\oauth2server\Module $module */
         $module = Yii::$app->getModule('oauth2');
-        $token = \filsh\yii2\oauth2server\models\OauthAccessTokens::findOne(['access_token' => $token])->getAttributes();
+        $ob = \filsh\yii2\oauth2server\models\OauthAccessTokens::findOne(['access_token' => $token]);
+        if($ob) {
+            $token = $ob->getAttributes();    
+        }
         //$token = $module->getServer()->getResourceController()->getToken();
         return isset($token['user_id']) && !empty($token['user_id'])
                     ? static::findIdentity($token['user_id'])
