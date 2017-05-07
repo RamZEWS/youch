@@ -256,6 +256,35 @@ Answer without errors:
 }
 ```
 
+Get profile by username  
+-------------------------------
+http://api.youch.me/user/get/<username>  
+Method: GET  
+Answer without errors:  
+```
+{
+    "id": 2,
+    "username": "admin",
+    "email": "admin@youch.me",
+    "first_name": "Roman",
+    "last_name": "Lukoyanov",
+    "state": "active",
+    "site": "http://youch.me/",
+    "avatar": null,
+    "get_messages": true | false,
+    "hide_events": true | false,
+    "birthday": "1990-10-28",
+    "about": "Romashka!!!",
+    "city": {
+        "name": "Нижний Новгород, Россия",
+        "city": "Нижний Новгород",
+        "google_id": "asdashfakjslhfakjslhf",
+        "lat": 52.3,
+        "lng": 26.5
+    }
+}
+```
+
 Change personal settings  
 -------------------------------
 http://api.youch.me/user/change-profile  
