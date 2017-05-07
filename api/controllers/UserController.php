@@ -20,7 +20,7 @@ class UserController extends BaseAuthController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
-                    'actions' => ['get'],
+                    'actions' => ['view'],
                     'allow' => true,
                 ],
                 [
@@ -34,7 +34,7 @@ class UserController extends BaseAuthController {
             'class' => VerbFilter::className(),
             'actions' => [
                 'profile' => ['GET'],
-                'get' => ['GET'],
+                'view' => ['GET'],
                 'black-list' => ['GET'],
                 'followers' => ['GET'],
                 'followings' => ['GET'],
@@ -142,7 +142,7 @@ class UserController extends BaseAuthController {
         return $user->delete();
     }
 
-    public function actionGet($id){
+    public function actionView($id){
         $user = User::find()->where(['username' => $id])->one();
         return $user;
     }

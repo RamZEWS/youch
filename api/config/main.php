@@ -53,6 +53,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
+                'user/get/<id:[\w-]+>'=>'user/view',
 
                 '<controller:[\w-]+>/?'=>'<controller>/index',
                 '<controller:[\w-]+>/<id:\d+>'=>'<controller>/view',
