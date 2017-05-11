@@ -7,6 +7,7 @@ use common\models\Content;
 use common\models\ContentCategory;
 use common\models\WeekDay;
 use common\models\WeekDayContent;
+use yii\web\UploadedFile;
 
 class ContentForm extends Model
 {
@@ -112,12 +113,11 @@ class ContentForm extends Model
     }
 
     public function validateImage($attribute, $params){
-        $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $model = new ImageBase64Form([
-            'base64string' => $bodyParams['image'],
-            'field' => 'image'
-        ]);
-        $this->image = $model->saveImage('/upload/content/');
+        $model = new UploadForm();
+        $model->file = UploadedFile::getInstanceByName('file');
+        if ($model->file && $model->validate()) {
+            $this->image = $model->saveImage('/upload/content/');
+        }
         if(!$this->image) {
             return $model;
         } else {

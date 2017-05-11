@@ -220,7 +220,7 @@ Params:
 Answer without errors:  
 ```
 {
-    "msg": "Инструкции по восстановлению пароля отправлены на указанный адрес электронной почты."
+    "msg": "Instructions was sent to the email."
 }
 ```
 
@@ -518,24 +518,14 @@ Set avatar
 -------------------------------
 http://api.youch.me/user/avatar  
 Method: POST  
-Params: 
-```
-{
-    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA..."
-}
-```  
+Params: form data with name=file  
 Answer without errors: User object  
 
 Remove avatar  
 -------------------------------
 http://api.youch.me/user/delete-avatar  
 Method: POST  
-Params: 
-```
-{
-    
-}
-```  
+Params: no params   
 Answer without errors: User object 
 
 
@@ -545,6 +535,87 @@ http://api.youch.me/user/delete
 Method: DELETE  
 Params: Authorization Header  
 Answer without errors:  true | false
+
+Get all comments
+-------------------------------
+http://api.youch.me/user/all-comments  
+Method: GET  
+Params: Authorization Header
+Answer without errors:
+```
+[
+    {
+        "id": 7,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657322,
+        "updated_at": 1493657322
+    },
+    {
+        "id": 6,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657303,
+        "updated_at": 1493657303
+    }
+]
+```
+
+Get my comments
+-------------------------------
+http://api.youch.me/user/my-comments  
+Method: GET  
+Params: Authorization Header
+Answer without errors:
+```
+[
+    {
+        "id": 7,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657322,
+        "updated_at": 1493657322
+    },
+    {
+        "id": 6,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657303,
+        "updated_at": 1493657303
+    }
+]
+```
+
+Get comments to my events
+-------------------------------
+http://api.youch.me/user/to-me-comments  
+Method: GET  
+Params: Authorization Header
+Answer without errors:
+```
+[
+    {
+        "id": 7,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657322,
+        "updated_at": 1493657322
+    },
+    {
+        "id": 6,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657303,
+        "updated_at": 1493657303
+    }
+]
+```
 
 Cities  
 ===============================
@@ -752,6 +823,7 @@ Create Content
 http://api.youch.me/content/save  
 Method: POST  
 Params:  
+Image must be set by form data with name=file  
 ```
 {
     "title": "Pass2",
@@ -784,8 +856,7 @@ Params:
             "from": "10:00",
             "to": "22:00"
         }
-    },
-    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA..."
+    }
 }
 ```  
 Answer without errors: Content Object  
@@ -795,6 +866,7 @@ Update Content
 http://api.youch.me/content/save  
 Method: POST  
 Params:  
+Image must be set by form data with name=file  
 ```
 {
     "id": 14,
@@ -828,8 +900,7 @@ Params:
             "from": "10:00",
             "to": "22:00"
         }
-    },
-    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA..."
+    }
 }
 ```  
 Answer without errors: Content Object  

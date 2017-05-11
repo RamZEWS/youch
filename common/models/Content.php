@@ -79,7 +79,7 @@ class Content extends ActiveRecord
 
     public function getFile(){
         if($this->file_base_url) {
-            return implode('', [getenv('API_URL'), $this->file_base_url, $this->file_url]);
+            return implode('', [$this->file_base_url, $this->file_url]);
         }
         return null;
     }

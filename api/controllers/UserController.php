@@ -5,12 +5,16 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use api\models\User;
+use api\models\Content;
 use api\models\BlackList;
 use api\models\UserSubscription;
+use api\models\ContentComment;
 use common\models\forms\ChangePasswordForm;
 use common\models\forms\ChangeProfileForm;
 use common\models\forms\ChangeProfileAlertsForm;
 use common\models\forms\ImageBase64Form;
+use common\models\forms\UploadForm;
+use yii\web\UploadedFile;
 
 class UserController extends BaseAuthController {
 
@@ -24,7 +28,7 @@ class UserController extends BaseAuthController {
                     'allow' => true,
                 ],
                 [
-                    'actions' => ['profile', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete'],
+                    'actions' => ['profile', 'content', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete', 'all-comments', 'my-comments', 'to-me-comments'],
                     'allow' => true,
                     'roles' => ['@'],
                 ]
@@ -35,9 +39,13 @@ class UserController extends BaseAuthController {
             'actions' => [
                 'profile' => ['GET'],
                 'view' => ['GET'],
+                'content' => ['GET'],
                 'black-list' => ['GET'],
                 'followers' => ['GET'],
                 'followings' => ['GET'],
+                'all-comments' => ['GET'],
+                'my-comments' => ['GET'],
+                'to-me-comments' => ['GET'],
                 'avatar' => ['POST'],
                 'delete-avatar' => ['POST'],
                 'change-password' => ['POST'],
@@ -56,12 +64,13 @@ class UserController extends BaseAuthController {
 
     public function actionAvatar()
     {
-        $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $model = new ImageBase64Form([
-            'base64string' => $bodyParams['image'],
-            'field' => 'image'
-        ]);
-        $image = $model->saveImage('/upload/users/');
+        $image = null;
+        $model = new UploadForm();
+        $model->file = UploadedFile::getInstanceByName('file');
+        if ($model->file && $model->validate()) {
+            $image = $model->saveImage('/upload/users/');
+        }
+
         if(!$image) {
             return $model;
         } else {
@@ -126,15 +135,15 @@ class UserController extends BaseAuthController {
     }
 
     public function actionBlackList(){
-        return BlackList::find()->where(['user_id' => Yii::$app->user->id])->select(['id', 'block_id', 'created_at', 'updated_at'])->all();
+        return BlackList::find()->where(['user_id' => Yii::$app->user->id])->orderBy(['created_at' => SORT_DESC])->select(['id', 'block_id', 'created_at', 'updated_at'])->all();
     }
 
     public function actionFollowers(){
-        return UserSubscription::find()->where(['follower_id' => Yii::$app->user->id])->select(['id', 'user_id', 'created_at', 'updated_at'])->all();
+        return UserSubscription::find()->where(['follower_id' => Yii::$app->user->id])->orderBy(['created_at' => SORT_DESC])->select(['id', 'user_id', 'created_at', 'updated_at'])->all();
     }
 
     public function actionFollowings(){
-        return UserSubscription::find()->where(['user_id' => Yii::$app->user->id])->select(['id', 'follower_id', 'created_at', 'updated_at'])->all();
+        return UserSubscription::find()->where(['user_id' => Yii::$app->user->id])->orderBy(['created_at' => SORT_DESC])->select(['id', 'follower_id', 'created_at', 'updated_at'])->all();
     }
 
     public function actionDelete(){
@@ -145,6 +154,34 @@ class UserController extends BaseAuthController {
     public function actionView($id){
         $user = User::find()->where(['username' => $id])->one();
         return $user;
+    }
+
+    public function actionContent(){
+        return Content::find()->where(['user_id' => Yii::$app->user->id])->orderBy(['created_at' => SORT_DESC])->all();
+    }
+
+    public function actionAllComments(){
+        return ContentComment::find()
+                ->joinWith('content', true)
+                ->orFilterWhere(['content_comment.user_id' => Yii::$app->user->id])
+                ->orFilterWhere(['content.user_id' => Yii::$app->user->id])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->all();
+    }
+
+    public function actionMyComments(){
+        return ContentComment::find()
+                ->andFilterWhere(['user_id' => Yii::$app->user->id])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->all();   
+    }
+
+    public function actionToMeComments(){
+        return ContentComment::find()
+                ->joinWith('content', true)
+                ->andFilterWhere(['content.user_id' => Yii::$app->user->id])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->all();
     }
 
 }

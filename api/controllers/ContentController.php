@@ -47,6 +47,12 @@ class ContentController extends BaseAuthActiveController {
         return $behaviors;
     }
 
+    public function actions() {
+        $actions = parent::actions();
+        unset($actions['index']);
+        return $actions;
+    }
+
     public $modelClass = 'api\models\Content';
 
     public function actionSave(){
@@ -88,5 +94,13 @@ class ContentController extends BaseAuthActiveController {
 
     public function actionGetComments($id){
         return ContentComment::find()->select(['id', 'comment', 'user_id', 'created_at', 'updated_at'])->where(['content_id' => $id])->orderBy(['created_at' => SORT_DESC])->all();
+    }
+
+    public function actionIndex($category_id = null){
+        $query = Content::find()->where(['status' => Content::STATUS_ACTIVE])->orderBy(['created_at' => SORT_DESC]);
+        if($category_id) {
+            $query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
+        }
+        return $query->all();
     }
 }
