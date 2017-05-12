@@ -662,8 +662,11 @@ Content
 ===============================
 Get Content List  
 -------------------------------
-http://api.youch.me/content  
+http://api.youch.me/content/?category_id=1  
 Method: GET  
+
+category_id is not required  
+
 Answer without errors:  
 ```
 [
