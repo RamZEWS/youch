@@ -396,11 +396,127 @@ Answer without errors:
 ]
 ```  
 
+Get black list by username  
+-------------------------------
+http://api.youch.me/subscription/black-list/<username>  
+Method: GET  
+Answer without errors:  
+```
+[
+    {
+        "id": 1,
+        "user": null,
+        "blocked": {
+            "id": 6,
+            "username": "RamZEWS",
+            "email": "ramzes.2007.90@gmail.com",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": "Блондинчик!",
+            "city": {
+                "name": "Брест, Беларусь",
+                "city": "Брест",
+                "google_id": null,
+                "lat": 52,
+                "lng": 23
+            }
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    },
+    {
+        "id": 2,
+        "user": null,
+        "blocked": {
+            "id": 4,
+            "username": "user",
+            "email": "user@youch.me",
+            "first_name": null,
+            "last_name": null,
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": null,
+            "city": null
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```  
+
 Get followers  
 -------------------------------
 http://api.youch.me/user/followers  
 Method: GET  
 Params: Authorization Header  
+Answer without errors:  
+```
+[
+    {
+        "id": 1,
+        "follower": null,
+        "user": {
+            "id": 6,
+            "username": "RamZEWS",
+            "email": "ramzes.2007.90@gmail.com",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": "Блондинчик!",
+            "city": {
+                "name": "Брест, Беларусь",
+                "city": "Брест",
+                "google_id": null,
+                "lat": 52,
+                "lng": 23
+            }
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    },
+    {
+        "id": 2,
+        "follower": null,
+        "user": {
+            "id": 4,
+            "username": "user",
+            "email": "user@youch.me",
+            "first_name": null,
+            "last_name": null,
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": null,
+            "city": null
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```  
+
+Get followers  by username  
+-------------------------------
+http://api.youch.me/subscription/followers/<username>  
+Method: GET  
 Answer without errors:  
 ```
 [
@@ -514,6 +630,64 @@ Answer without errors:
 ]
 ```  
 
+Get followings by username  
+-------------------------------
+http://api.youch.me/subscription/followings/<username>  
+Method: GET  
+Answer without errors:  
+```
+[
+    {
+        "id": 1,
+        "user": null,
+        "follower": {
+            "id": 6,
+            "username": "RamZEWS",
+            "email": "ramzes.2007.90@gmail.com",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": "Блондинчик!",
+            "city": {
+                "name": "Брест, Беларусь",
+                "city": "Брест",
+                "google_id": null,
+                "lat": 52,
+                "lng": 23
+            }
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    },
+    {
+        "id": 2,
+        "user": null,
+        "blocked": {
+            "id": 4,
+            "username": "user",
+            "email": "user@youch.me",
+            "first_name": null,
+            "last_name": null,
+            "state": "active",
+            "site": null,
+            "avatar": null,
+            "get_messages": null,
+            "hide_events": null,
+            "birthday": null,
+            "about": null,
+            "city": null
+        },
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```  
+
 Set avatar  
 -------------------------------
 http://api.youch.me/user/avatar  
@@ -561,7 +735,7 @@ Answer without errors:
         "updated_at": 1493657303
     }
 ]
-```
+```  
 
 Get my comments
 -------------------------------
@@ -588,7 +762,7 @@ Answer without errors:
         "updated_at": 1493657303
     }
 ]
-```
+```  
 
 Get comments to my events
 -------------------------------
@@ -615,7 +789,61 @@ Answer without errors:
         "updated_at": 1493657303
     }
 ]
+```  
+
+Get comments by username
+-------------------------------
+http://api.youch.me/comment/user/<username>  
+Method: GET  
+Params: Authorization Header
+Answer without errors:
 ```
+[
+    {
+        "id": 7,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657322,
+        "updated_at": 1493657322
+    },
+    {
+        "id": 6,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657303,
+        "updated_at": 1493657303
+    }
+]
+```  
+
+Get comments to username events
+-------------------------------
+http://api.youch.me/comment/to-user/<username>  
+Method: GET  
+Params: Authorization Header
+Answer without errors:
+```
+[
+    {
+        "id": 7,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657322,
+        "updated_at": 1493657322
+    },
+    {
+        "id": 6,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657303,
+        "updated_at": 1493657303
+    }
+]
+```  
 
 Cities  
 ===============================
@@ -819,6 +1047,86 @@ Answer without errors:
     "created_at": 1492885673,
     "updated_at": 1492885673
 }
+```
+
+Get User Content List
+-------------------------------
+http://api.youch.me/content/user/<username>  
+Method: GET  
+Answer without errors:  
+```
+[
+    {
+        "id": 12,
+        "title": "New Content",
+        "description": "New Desc",
+        "user": {
+            "id": 2,
+            "username": "admin",
+            "email": "admin@youch.me",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": "http://youch.me/",
+            "avatar": null,
+            "get_messages": 1,
+            "hide_events": 0,
+            "birthday": "1990-10-28",
+            "about": "Romashka!!!",
+            "city": {
+                "name": "Нижний Новгород, Россия",
+                "city": "Нижний Новгород",
+                "google_id": "asdashfakjslhfakjslhf",
+                "lat": 52.3,
+                "lng": 26.5
+            }
+        },
+        "categories": [
+            {
+                "id": 1,
+                "name_ru": "Туризм",
+                "name_en": "Tourism",
+                "created_at": 1492885673,
+                "updated_at": 1492885673
+            },
+            {
+                "id": 2,
+                "name_ru": "Европа",
+                "name_en": "Europe",
+                "created_at": 1492885673,
+                "updated_at": 1492885673
+            }
+        ],
+        "days": {
+            "mon": {
+                "from": "09:00",
+                "to": "21:00"
+            },
+            "tue": {
+                "from": "09:00",
+                "to": "21:00"
+            }
+        },
+        "price_from": 200.02,
+        "price_to": 201.02,
+        "is_free": 0,
+        "date_from": "2017-11-12 12:12:12",
+        "date_to": "2017-12-12 12:12:12",
+        "site": "http://yandex.ru/",
+        "phone": "89047946559",
+        "city": {
+            "name": "Брест, Беларусь",
+            "city": "Брест",
+            "google_id": null,
+            "lat": 52,
+            "lng": 23
+        },
+        "state": "active",
+        "file": null,
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
 ```
 
 Create Content

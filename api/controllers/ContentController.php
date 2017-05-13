@@ -17,7 +17,7 @@ class ContentController extends BaseAuthActiveController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
-                    'actions' => ['index', 'view', 'get-comments'],
+                    'actions' => ['index', 'view', 'get-comments', 'user'],
                     'allow' => true
                 ],
                 [
@@ -36,6 +36,7 @@ class ContentController extends BaseAuthActiveController {
             'class' => VerbFilter::className(),
             'actions' => [
                 'index' => ['GET'],
+                'user' => ['GET'],
                 'get-comments' => ['GET'],
                 'add-comment' => ['POST'],
                 'add-mark' => ['POST'],
@@ -102,5 +103,13 @@ class ContentController extends BaseAuthActiveController {
             $query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
         }
         return $query->all();
+    }
+
+    public function actionUser($id){
+        return Content::find()
+                ->joinWith('user', true)
+                ->where(['user.username' => $id, 'content.status' => Content::STATUS_ACTIVE])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->all();
     }
 }

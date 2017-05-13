@@ -54,6 +54,13 @@ $config = [
             'rules' => [
                 'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
                 'user/get/<id:[\w-]+>'=>'user/view',
+                
+                'content/user/<id:[\w-]+>'=>'content/user',
+                'subscription/black-list/<id:[\w-]+>'=>'subscription/black-list',
+                'subscription/followers/<id:[\w-]+>'=>'subscription/followers',
+                'subscription/followings/<id:[\w-]+>'=>'subscription/followings',
+                'comment/user/<id:[\w-]+>'=>'comment/user',
+                'comment/to-user/<id:[\w-]+>'=>'comment/to-user',
 
                 '<controller:[\w-]+>/?'=>'<controller>/index',
                 '<controller:[\w-]+>/<id:\d+>'=>'<controller>/view',

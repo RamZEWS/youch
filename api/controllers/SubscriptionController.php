@@ -22,6 +22,10 @@ class SubscriptionController extends BaseAuthController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
+                    'actions' => ['black-list', 'followers', 'followings'],
+                    'allow' => true
+                ],
+                [
                     'actions' => ['block', 'remove-block', 'follow', 'remove-follow'],
                     'allow' => true,
                     'roles' => ['@']
@@ -31,6 +35,9 @@ class SubscriptionController extends BaseAuthController {
         $behaviors['verbs'] = [
             'class' => VerbFilter::className(),
             'actions' => [
+                'black-list' => ['get'],
+                'followers' => ['get'],
+                'followings' => ['get'],
                 'block' => ['post'],
                 'remove-block' => ['post'],
                 'follow' => ['post'],
@@ -68,6 +75,15 @@ class SubscriptionController extends BaseAuthController {
         return BlackList::find()->where(['user_id' => Yii::$app->user->id, 'block_id' => $user_id])->one();
     }
 
+    public function actionBlackList($id) {
+        return BlackList::find()
+                ->joinWith('user', true)
+                ->where(['user.username' => $id])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->select(['black_list.id', 'black_list.block_id', 'black_list.created_at', 'black_list.updated_at'])
+                ->all();
+    }
+
     public function actionFollow() {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         if(isset($bodyParams['user_id'])) {
@@ -93,5 +109,22 @@ class SubscriptionController extends BaseAuthController {
     }
     private function findFollow($user_id){
         return UserSubscription::find()->where(['user_id' => Yii::$app->user->id, 'follower_id' => $user_id])->one();
+    }
+
+    public function actionFollowers($id) {
+        return UserSubscription::find()
+                ->joinWith('follower', true)
+                ->where(['user.username' => $id])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->select(['user_subscription.id', 'user_subscription.user_id', 'user_subscription.created_at', 'user_subscription.updated_at'])
+                ->all();
+    }
+    public function actionFollowings($id) {
+        return UserSubscription::find()
+                ->joinWith('user', true)
+                ->where(['user.username' => $id])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->select(['user_subscription.id', 'user_subscription.follower_id', 'user_subscription.created_at', 'user_subscription.updated_at'])
+                ->all();
     }
 }
