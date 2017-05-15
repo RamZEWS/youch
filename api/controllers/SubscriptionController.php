@@ -51,12 +51,18 @@ class SubscriptionController extends BaseAuthController {
     public function actionBlock() {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         if(isset($bodyParams['user_id'])) {
-            $existed = $this->findBlock($bodyParams['user_id']);
-            if(!$existed) {
-                $model = new BlackList(['block_id' => $bodyParams['user_id']]);
-                if($model->validate()) {
-                    $model->save();
+            $model = new BlackList();
+            if($bodyParams['user_id'] != Yii::$app->user->id) {
+                $existed = $this->findBlock($bodyParams['user_id']);
+                if(!$existed) {
+                    $model->block_id = $bodyParams['user_id'];
+                    if($model->validate()) {
+                        $model->save();
+                    }
                 }
+            } else {
+                $model->addError('user_id', 'You cannot block youself.');
+                return $model;
             }
         }
         return BlackList::find()->where(['user_id' => Yii::$app->user->id])->select(['id', 'block_id', 'created_at', 'updated_at'])->all(); 
@@ -87,12 +93,18 @@ class SubscriptionController extends BaseAuthController {
     public function actionFollow() {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         if(isset($bodyParams['user_id'])) {
-            $existed = $this->findFollow($bodyParams['user_id']);
-            if(!$existed) {
-                $model = new UserSubscription(['follower_id' => $bodyParams['user_id']]);
-                if($model->validate()) {
-                    $model->save();
+            $model = new UserSubscription();
+            if($bodyParams['user_id'] != Yii::$app->user->id) {
+                $existed = $this->findFollow($bodyParams['user_id']);
+                if(!$existed) {
+                    $model->follower_id = $bodyParams['user_id'];
+                    if($model->validate()) {
+                        $model->save();
+                    }
                 }
+            } else {
+                $model->addError('user_id', 'You cannot follow youself.');
+                return $model;
             }
         }
         return UserSubscription::find()->where(['user_id' => Yii::$app->user->id])->select(['id', 'follower_id', 'created_at', 'updated_at'])->all();

@@ -3,6 +3,7 @@
 namespace api\models;
 
 use common\models\Content as CommonContent;
+use api\components\DateFormatter;
 
 class Content extends CommonContent {
     public static $statuses = [
@@ -36,6 +37,15 @@ class Content extends CommonContent {
         ];
     }
 
+    public function __get($name) {
+        if(in_array($name, ['is_free'])){
+            return (bool)$this->getAttribute($name);
+        }/* else if(in_array($name, ['date_from', 'date_to'])){
+            return DateFormatter::convert($this->getAttribute($name), 'datetime');
+        }*/
+        return parent::__get($name);
+    }
+
     public function getState(){
         return isset(self::$statuses[$this->status]) ? self::$statuses[$this->status] : "unknown";
     }
@@ -52,7 +62,7 @@ class Content extends CommonContent {
     public function getDays() {
         $days = [];
         $contentDays = WeekDayContent::find()->where(['content_id' => $this->id])->all();
-        foreach($contentDays as $d) $days[$d->day->code] = ['from' => $d->from, 'to' => $d->to];
+        foreach($contentDays as $d) $days[$d->day->code] = ['name' => $d->day->name_en, 'from' => $d->from, 'to' => $d->to];
         return $days;
     }
 

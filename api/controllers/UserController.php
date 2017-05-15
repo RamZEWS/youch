@@ -67,6 +67,7 @@ class UserController extends BaseAuthController {
         $image = null;
         $model = new UploadForm();
         $model->file = UploadedFile::getInstanceByName('file');
+
         if ($model->file && $model->validate()) {
             $image = $model->saveImage('/upload/users/');
         }
