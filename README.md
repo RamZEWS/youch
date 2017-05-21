@@ -101,7 +101,7 @@ Params:
     "last_name": "Last name",
     "email": "email",
     "role": "tourist | company"
-    "password": "password",
+    "password": "password", // minLength => 6
     "confirm_password": "confirm_password"
 }
 ```
@@ -318,7 +318,7 @@ Params: Authorization Header
 ```
 {
     "old_password": "old_password",
-    "password": "new_password",
+    "password": "new_password", // minLength => 6
     "confirm_password": "confirm_new_password"
 }
 ```
@@ -693,6 +693,7 @@ Set avatar
 http://api.youch.me/user/avatar  
 Method: POST  
 Params: form data with name=file  
+extensions => gif, jpg, png, jpeg  
 Answer without errors: User object  
 
 Remove avatar  
@@ -890,10 +891,12 @@ Content
 ===============================
 Get Content List  
 -------------------------------
-http://api.youch.me/content/?category_id=1  
+http://api.youch.me/content/?category_id=1&page=1&perpage=10  
 Method: GET  
 
-category_id is not required  
+category_id is not required
+page is not required (default 1)
+perpage is not required (default 10)  
 
 Answer without errors:  
 ```
@@ -951,7 +954,8 @@ Answer without errors:
         },
         "price_from": 200.02,
         "price_to": 201.02,
-        "is_free": 0,
+        "is_free": true / false,
+        "is_tour": true / false,
         "date_from": "2017-11-12 12:12:12",
         "date_to": "2017-12-12 12:12:12",
         "site": "http://yandex.ru/",
@@ -1030,7 +1034,8 @@ Answer without errors:
     },
     "price_from": 200.02,
     "price_to": 201.02,
-    "is_free": 0,
+    "is_free": true / false,
+    "is_tour": true / false,
     "date_from": "2017-11-12 12:12:12",
     "date_to": "2017-12-12 12:12:12",
     "site": "http://yandex.ru/",
@@ -1109,7 +1114,8 @@ Answer without errors:
         },
         "price_from": 200.02,
         "price_to": 201.02,
-        "is_free": 0,
+        "is_free": true / false,
+        "is_tour": true / false,
         "date_from": "2017-11-12 12:12:12",
         "date_to": "2017-12-12 12:12:12",
         "site": "http://yandex.ru/",
@@ -1134,16 +1140,19 @@ Create Content
 http://api.youch.me/content/save  
 Method: POST  
 Params:  
-Image must be set by form data with name=file  
+Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)  
 ```
 {
     "title": "Pass2",
     "description": "ALALA!2",
     "price_from": 10.05,
     "price_to": 205.5,
-    "is_free": 0,
+    "is_free": true / false,
+    "is_tour": true / false,
     "date_from": "2017-04-12",
     "date_to": "2017-05-20",
+    "time_from": "09:00",
+    "time_to": "21:00",
     "site": "http://site.com/",
     "phone": "9047946559",
     "city": {
@@ -1177,7 +1186,7 @@ Update Content
 http://api.youch.me/content/save  
 Method: POST  
 Params:  
-Image must be set by form data with name=file  
+Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)  
 ```
 {
     "id": 14,
@@ -1185,7 +1194,8 @@ Image must be set by form data with name=file
     "description": "ALALA!2",
     "price_from": 10.05,
     "price_to": 205.5,
-    "is_free": 0,
+    "is_free": true / false,
+    "is_tour": true / false,
     "date_from": "2017-04-12",
     "date_to": "2017-05-20",
     "site": "http://site.com/",
@@ -1218,8 +1228,13 @@ Answer without errors: Content Object
 
 Get Comments
 -------------------------------
-http://api.youch.me/content/get-comments?id=<content_id>  
-Method: GET  
+http://api.youch.me/content/get-comments?id=<content_id>&page=1&perpage=10  
+Method: GET
+  
+id is required  
+page is not required (default 1)  
+perpage is not required (default 10)  
+  
 Params:  
 ```
 {

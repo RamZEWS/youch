@@ -24,8 +24,11 @@ class Content extends CommonContent {
             'price_from',
             'price_to',
             'is_free',
+            'is_tour',
             'date_from',
             'date_to',
+            'time_from',
+            'time_to',
             'site',
             'phone',
             'city',
@@ -38,11 +41,13 @@ class Content extends CommonContent {
     }
 
     public function __get($name) {
-        if(in_array($name, ['is_free'])){
+        if(in_array($name, ['is_free', 'is_tour'])){
             return (bool)$this->getAttribute($name);
-        }/* else if(in_array($name, ['date_from', 'date_to'])){
-            return DateFormatter::convert($this->getAttribute($name), 'datetime');
-        }*/
+        } else if(in_array($name, ['date_from', 'date_to'])){
+            return DateFormatter::convert($this->getAttribute($name));
+        } else if(in_array($name, ['time_from', 'time_to'])){
+            return DateFormatter::convert($this->getAttribute($name), 'time');
+        }
         return parent::__get($name);
     }
 

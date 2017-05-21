@@ -9,6 +9,7 @@ use common\models\forms\ContentForm;
 use api\models\Content;
 use api\models\ContentRating;
 use api\models\ContentComment;
+use yii\data\ActiveDataProvider;
 
 class ContentController extends BaseAuthActiveController {
     public function behaviors() {
@@ -60,7 +61,7 @@ class ContentController extends BaseAuthActiveController {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         $model = new ContentForm();
         $model->load($bodyParams, '');
-        if ($model->validate() && $model->saveContent()) {
+        if ($model->saveContent()) {
             return Content::findOne($model->id);
         } else {
             return $model;
@@ -93,16 +94,29 @@ class ContentController extends BaseAuthActiveController {
         return $model;
     }
 
-    public function actionGetComments($id){
-        return ContentComment::find()->select(['id', 'comment', 'user_id', 'created_at', 'updated_at'])->where(['content_id' => $id])->orderBy(['created_at' => SORT_DESC])->all();
+    public function actionGetComments($id, $page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => ContentComment::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+            ],
+        ]);
+        $activeData->query->->select(['id', 'comment', 'user_id', 'created_at', 'updated_at'])->where(['content_id' => $id])->orderBy(['created_at' => SORT_DESC]);
+        return $activeData;
     }
 
-    public function actionIndex($category_id = null){
-        $query = Content::find()->where(['status' => Content::STATUS_ACTIVE])->orderBy(['created_at' => SORT_DESC]);
+    public function actionIndex($category_id = null, $page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => Content::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+            ],
+        ]);
+        $activeData->query->where(['status' => Content::STATUS_ACTIVE])->orderBy(['created_at' => SORT_DESC]);
         if($category_id) {
-            $query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
+            $activeData->query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
         }
-        return $query->all();
+        return $activeData;
     }
 
     public function actionUser($id){

@@ -16,8 +16,11 @@ use yii\db\ActiveRecord;
  * @property double $price_from
  * @property double $price_to
  * @property integer $is_free
+ * @property integer $is_tour
  * @property datetime $date_from
  * @property datetime $date_to
+ * @property string $time_from
+ * @property string $time_to
  * @property string $site
  * @property string $phone
  * @property string $file_base_url
@@ -56,8 +59,8 @@ class Content extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'description', 'site', 'phone', 'file_base_url', 'file_url'], 'string'],
-            [['is_free', 'user_id', 'city_id', 'status'], 'integer'],
+            [['title', 'description', 'site', 'phone', 'file_base_url', 'file_url', 'time_from', 'time_to'], 'string'],
+            [['is_free', 'is_tour', 'user_id', 'city_id', 'status'], 'integer'],
             [['price_from', 'price_to', 'rating'], 'double'],
             [['date_from', 'date_to'], 'safe'],
             ['user_id', 'default', 'value' => Yii::$app->user->id],

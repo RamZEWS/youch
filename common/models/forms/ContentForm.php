@@ -17,8 +17,11 @@ class ContentForm extends Model
     public $price_from;
     public $price_to;
     public $is_free;
+    public $is_tour;
     public $date_from;
     public $date_to;
+    public $time_from;
+    public $time_to;
     public $site;
     public $phone;
     public $city;
@@ -32,12 +35,11 @@ class ContentForm extends Model
     public function rules()
     {
         return [
-            [['title', 'description', 'site', 'phone'], 'string'],
-            [['is_free', 'id'], 'integer'],
+            [['title', 'description', 'site', 'phone', 'time_from', 'time_to'], 'string'],
+            [['is_free', 'is_tour', 'id'], 'integer'],
             [['price_from', 'price_to'], 'double'],
             [['date_from', 'date_to'], 'safe'],
-            [['city'], 'validateCity'],
-            [['image'], 'validateImage']
+            [['city'], 'validateCity']
         ];
     }
 
@@ -50,13 +52,18 @@ class ContentForm extends Model
                 $this->content->price_from = $this->price_from;
                 $this->content->price_to = $this->price_to;
                 $this->content->is_free = $this->is_free;
+                $this->content->is_free = $this->is_tour;
                 $this->content->date_from = $this->date_from;
                 $this->content->date_to = $this->date_to;
+                $this->content->time_from = $this->time_from;
+                $this->content->time_to = $this->time_to;
                 $this->content->site = $this->site;
                 $this->content->phone = $this->phone;
+                $this->content->city_id = $this->city ? $this->city->id : null;
+
+                $this->uploadImage();
                 $this->content->file_base_url = isset($this->image['base_url']) ? $this->image['base_url'] : null;
                 $this->content->file_url = isset($this->image['file_name']) ? $this->image['file_name'] : null;
-                $this->content->city_id = $this->city ? $this->city->id : null;
 
                 if($this->content->validate() && $this->content->save()) {
                     $this->saveCategories();
@@ -112,7 +119,7 @@ class ContentForm extends Model
         }   
     }
 
-    public function validateImage($attribute, $params){
+    public function uploadImage(){
         $model = new UploadForm();
         $model->file = UploadedFile::getInstanceByName('file');
         if ($model->file && $model->validate()) {
