@@ -5,7 +5,7 @@ namespace api\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use common\models\forms\ContentForm;
+use common\models\forms\TourForm;
 use api\models\Content;
 use api\models\ContentRating;
 use api\models\ContentComment;
@@ -63,7 +63,7 @@ class TourController extends BaseAuthActiveController {
 
     public function actionSave(){
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $model = new ContentForm();
+        $model = new TourForm();
         $model->load($bodyParams, '');
         $model->is_tour = 1;
         if ($model->saveContent()) {

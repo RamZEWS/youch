@@ -13,16 +13,14 @@ class Content extends CommonContent {
     ];
 
     public function fields() {
-        return [
+        $fields = [
             'id',
             'title',
             'description',
             'user',
             'rating',
-            'categories',
+            'category',
             'days',
-            'price_from',
-            'price_to',
             'is_free',
             'is_tour',
             'date_from',
@@ -38,6 +36,15 @@ class Content extends CommonContent {
             'created_at',
             'updated_at'
         ];
+
+        if($this->is_tour) {
+            $fields[] = 'price';
+        } else {
+            $fields[] = 'price_from';
+            $fields[] = 'price_to';
+        }
+
+        return $fields;
     }
 
     public function __get($name) {
@@ -55,12 +62,16 @@ class Content extends CommonContent {
         return isset(self::$statuses[$this->status]) ? self::$statuses[$this->status] : "unknown";
     }
 
+    public function getPrice(){
+        return $this->price_from;
+    }    
+
     public function getCity(){
         return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 
-    public function getCategories() {
-        return $this->hasMany(Category::className(), ['id' => 'category_id'])
+    public function getCategory() {
+        return $this->hasOne(Category::className(), ['id' => 'category_id'])
             ->viaTable(ContentCategory::tableName(), ['content_id' => 'id']);
     }
 

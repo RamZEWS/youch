@@ -70,7 +70,7 @@ class Content extends ActiveRecord
     }
 
     public function getCategories() {
-        return $this->hasMany(ContentCategory::className(), ['content_id' => 'id']);
+        return $this->hasOne(ContentCategory::className(), ['content_id' => 'id']);
     }
 
     public function getDays() {
