@@ -28,7 +28,7 @@ class UserController extends BaseAuthController {
                     'allow' => true,
                 ],
                 [
-                    'actions' => ['profile', 'content', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete', 'all-comments', 'my-comments', 'to-me-comments'],
+                    'actions' => ['profile', 'content', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete', 'all-comments', 'my-comments', 'to-me-comments', 'to-my-contents', 'to-my-tours'],
                     'allow' => true,
                     'roles' => ['@'],
                 ]
@@ -46,6 +46,8 @@ class UserController extends BaseAuthController {
                 'all-comments' => ['GET'],
                 'my-comments' => ['GET'],
                 'to-me-comments' => ['GET'],
+                'to-my-contents' => ['GET'],
+                'to-my-tours' => ['GET'],
                 'avatar' => ['POST'],
                 'delete-avatar' => ['POST'],
                 'change-password' => ['POST'],
@@ -158,7 +160,11 @@ class UserController extends BaseAuthController {
     }
 
     public function actionContent(){
-        return Content::find()->where(['user_id' => Yii::$app->user->id])->orderBy(['created_at' => SORT_DESC])->all();
+        return Content::find()->where(['user_id' => Yii::$app->user->id, 'is_tour' => 0])->orderBy(['created_at' => SORT_DESC])->all();
+    }
+
+    public function actionTour(){
+        return Content::find()->where(['user_id' => Yii::$app->user->id, 'is_tour' => 1])->orderBy(['created_at' => SORT_DESC])->all();
     }
 
     public function actionAllComments(){
@@ -181,6 +187,22 @@ class UserController extends BaseAuthController {
         return ContentComment::find()
                 ->joinWith('content', true)
                 ->andFilterWhere(['content.user_id' => Yii::$app->user->id])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->all();
+    }
+
+    public function actionToMyContents(){
+        return ContentComment::find()
+                ->joinWith('content', true)
+                ->andFilterWhere(['content.user_id' => Yii::$app->user->id, 'content.is_tour' => 0])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->all();
+    }
+
+    public function actionToMyTours(){
+        return ContentComment::find()
+                ->joinWith('content', true)
+                ->andFilterWhere(['content.user_id' => Yii::$app->user->id, 'content.is_tour' => 1])
                 ->orderBy(['created_at' => SORT_DESC])
                 ->all();
     }

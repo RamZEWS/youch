@@ -6,14 +6,12 @@ class m170521_064654_content_is_tour extends Migration
 {
     public function up()
     {
-        $this->addColumn('{{%content}}', 'is_tour', $this->integer());
+        $this->addColumn('{{%content}}', 'is_tour', $this->integer()->defaultValue(0));
     }
 
     public function down()
     {
-        echo "m170521_064654_content_is_tour cannot be reverted.\n";
-
-        return false;
+        $this->dropColumn('{{%content}}', 'is_tour');
     }
 
     /*

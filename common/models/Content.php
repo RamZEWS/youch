@@ -60,11 +60,12 @@ class Content extends ActiveRecord
     {
         return [
             [['title', 'description', 'site', 'phone', 'file_base_url', 'file_url', 'time_from', 'time_to'], 'string'],
-            [['is_free', 'is_tour', 'user_id', 'city_id', 'status'], 'integer'],
+            [['user_id', 'city_id', 'status'], 'integer'],
             [['price_from', 'price_to', 'rating'], 'double'],
             [['date_from', 'date_to'], 'safe'],
             ['user_id', 'default', 'value' => Yii::$app->user->id],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            [['is_tour', 'is_free'], 'boolean']
         ];
     }
 

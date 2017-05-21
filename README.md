@@ -765,7 +765,7 @@ Answer without errors:
 ]
 ```  
 
-Get comments to my events
+Get comments to my all events
 -------------------------------
 http://api.youch.me/user/to-me-comments  
 Method: GET  
@@ -791,6 +791,60 @@ Answer without errors:
     }
 ]
 ```  
+
+Get comments to my contents  
+-------------------------------
+http://api.youch.me/user/to-my-contents  
+Method: GET  
+Params: Authorization Header
+Answer without errors:
+```
+[
+    {
+        "id": 7,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657322,
+        "updated_at": 1493657322
+    },
+    {
+        "id": 6,
+        "content": {...Content object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657303,
+        "updated_at": 1493657303
+    }
+]
+```  
+
+Get comments to my tours  
+-------------------------------
+http://api.youch.me/user/to-my-tours  
+Method: GET  
+Params: Authorization Header
+Answer without errors:
+```
+[
+    {
+        "id": 7,
+        "content": {...Tour object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657322,
+        "updated_at": 1493657322
+    },
+    {
+        "id": 6,
+        "content": {...Tour object...},
+        "user": {...User object...},
+        "comment": "123123213213",
+        "created_at": 1493657303,
+        "updated_at": 1493657303
+    }
+]
+```
 
 Get comments by username
 -------------------------------
@@ -845,6 +899,20 @@ Answer without errors:
     }
 ]
 ```  
+
+User contents  
+-------------------------------
+http://api.youch.me/user/content  
+Method: POST  
+Params: Authorization Header  
+Answer without errors: List of Content Objects  
+
+User tours  
+-------------------------------
+http://api.youch.me/user/tour  
+Method: POST  
+Params: Authorization Header   
+Answer without errors: List of Tour Objects  
 
 Cities  
 ===============================
@@ -1268,6 +1336,419 @@ Params:
 }
 ```  
 Answer without errors: Content Object  
+
+Set Image
+-------------------------------
+http://api.youch.me/content/image?id=<content_id>  
+Method: POST  
+Params: Autorization header  
+Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)  
+Answer without errors: Content Object  
+
+Delete Image
+-------------------------------
+http://api.youch.me/content/delete-image?id=<content_id>  
+Method: POST  
+Params: Autorization header  
+Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)  
+Answer without errors: Content Object 
+
+Tours  
+===============================
+Get tour List  
+-------------------------------
+http://api.youch.me/tour/?category_id=1&page=1&perpage=10  
+Method: GET  
+
+category_id is not required
+page is not required (default 1)
+perpage is not required (default 10)  
+
+Answer without errors:  
+```
+[
+    {
+        "id": 12,
+        "title": "New Content",
+        "description": "New Desc",
+        "user": {
+            "id": 2,
+            "username": "admin",
+            "email": "admin@youch.me",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": "http://youch.me/",
+            "avatar": null,
+            "get_messages": 1,
+            "hide_events": 0,
+            "birthday": "1990-10-28",
+            "about": "Romashka!!!",
+            "city": {
+                "name": "Нижний Новгород, Россия",
+                "city": "Нижний Новгород",
+                "google_id": "asdashfakjslhfakjslhf",
+                "lat": 52.3,
+                "lng": 26.5
+            }
+        },
+        "categories": [
+            {
+                "id": 1,
+                "name_ru": "Туризм",
+                "name_en": "Tourism",
+                "created_at": 1492885673,
+                "updated_at": 1492885673
+            },
+            {
+                "id": 2,
+                "name_ru": "Европа",
+                "name_en": "Europe",
+                "created_at": 1492885673,
+                "updated_at": 1492885673
+            }
+        ],
+        "days": {
+            "mon": {
+                "from": "09:00",
+                "to": "21:00"
+            },
+            "tue": {
+                "from": "09:00",
+                "to": "21:00"
+            }
+        },
+        "price_from": 200.02,
+        "price_to": 201.02,
+        "is_free": true / false,
+        "is_tour": true / false,
+        "date_from": "2017-11-12 12:12:12",
+        "date_to": "2017-12-12 12:12:12",
+        "site": "http://yandex.ru/",
+        "phone": "89047946559",
+        "city": {
+            "name": "Брест, Беларусь",
+            "city": "Брест",
+            "google_id": null,
+            "lat": 52,
+            "lng": 23
+        },
+        "state": "active",
+        "file": null,
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```
+
+Get Tour
+-------------------------------
+http://api.youch.me/tour/<tour_id>
+Method: GET  
+Answer without errors:  
+```
+{
+    "id": 12,
+    "title": "New Content",
+    "description": "New Desc",
+    "user": {
+        "id": 2,
+        "username": "admin",
+        "email": "admin@youch.me",
+        "first_name": "Roman",
+        "last_name": "Lukoyanov",
+        "state": "active",
+        "site": "http://youch.me/",
+        "avatar": null,
+        "get_messages": 1,
+        "hide_events": 0,
+        "birthday": "1990-10-28",
+        "about": "Romashka!!!",
+        "city": {
+            "name": "Нижний Новгород, Россия",
+            "city": "Нижний Новгород",
+            "google_id": "asdashfakjslhfakjslhf",
+            "lat": 52.3,
+            "lng": 26.5
+        }
+    },
+    "categories": [
+        {
+            "id": 1,
+            "name_ru": "Туризм",
+            "name_en": "Tourism",
+            "created_at": 1492885673,
+            "updated_at": 1492885673
+        },
+        {
+            "id": 2,
+            "name_ru": "Европа",
+            "name_en": "Europe",
+            "created_at": 1492885673,
+            "updated_at": 1492885673
+        }
+    ],
+    "days": {
+        "mon": {
+            "from": "09:00",
+            "to": "21:00"
+        },
+        "tue": {
+            "from": "09:00",
+            "to": "21:00"
+        }
+    },
+    "price_from": 200.02,
+    "price_to": 201.02,
+    "is_free": true / false,
+    "is_tour": true / false,
+    "date_from": "2017-11-12 12:12:12",
+    "date_to": "2017-12-12 12:12:12",
+    "site": "http://yandex.ru/",
+    "phone": "89047946559",
+    "city": {
+        "name": "Брест, Беларусь",
+        "city": "Брест",
+        "google_id": null,
+        "lat": 52,
+        "lng": 23
+    },
+    "state": "active",
+    "file": null,
+    "created_at": 1492885673,
+    "updated_at": 1492885673
+}
+```
+
+Get User Tour List
+-------------------------------
+http://api.youch.me/tour/user/<username>  
+Method: GET  
+Answer without errors:  
+```
+[
+    {
+        "id": 12,
+        "title": "New Content",
+        "description": "New Desc",
+        "user": {
+            "id": 2,
+            "username": "admin",
+            "email": "admin@youch.me",
+            "first_name": "Roman",
+            "last_name": "Lukoyanov",
+            "state": "active",
+            "site": "http://youch.me/",
+            "avatar": null,
+            "get_messages": 1,
+            "hide_events": 0,
+            "birthday": "1990-10-28",
+            "about": "Romashka!!!",
+            "city": {
+                "name": "Нижний Новгород, Россия",
+                "city": "Нижний Новгород",
+                "google_id": "asdashfakjslhfakjslhf",
+                "lat": 52.3,
+                "lng": 26.5
+            }
+        },
+        "categories": [
+            {
+                "id": 1,
+                "name_ru": "Туризм",
+                "name_en": "Tourism",
+                "created_at": 1492885673,
+                "updated_at": 1492885673
+            },
+            {
+                "id": 2,
+                "name_ru": "Европа",
+                "name_en": "Europe",
+                "created_at": 1492885673,
+                "updated_at": 1492885673
+            }
+        ],
+        "days": {
+            "mon": {
+                "from": "09:00",
+                "to": "21:00"
+            },
+            "tue": {
+                "from": "09:00",
+                "to": "21:00"
+            }
+        },
+        "price_from": 200.02,
+        "price_to": 201.02,
+        "is_free": true / false,
+        "is_tour": true / false,
+        "date_from": "2017-11-12 12:12:12",
+        "date_to": "2017-12-12 12:12:12",
+        "site": "http://yandex.ru/",
+        "phone": "89047946559",
+        "city": {
+            "name": "Брест, Беларусь",
+            "city": "Брест",
+            "google_id": null,
+            "lat": 52,
+            "lng": 23
+        },
+        "state": "active",
+        "file": null,
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    }
+]
+```
+
+Create Tour
+-------------------------------
+http://api.youch.me/tour/save  
+Method: POST  
+Params:  
+```
+{
+    "title": "Pass2",
+    "description": "ALALA!2",
+    "price_from": 10.05,
+    "price_to": 205.5,
+    "is_free": true / false,
+    "is_tour": true / false,
+    "date_from": "2017-04-12",
+    "date_to": "2017-05-20",
+    "time_from": "09:00",
+    "time_to": "21:00",
+    "site": "http://site.com/",
+    "phone": "9047946559",
+    "city": {
+        "city": "Брест",
+        "name": "Брест, Беларусь",
+        "lat": 52,
+        "long": 23,
+        "id": "dasndashdkjashd"
+    },
+    "category_ids": [2],
+    "hours": {
+        "mon": {
+            "from": "09:00",
+            "to": "21:00"
+        },
+        "tue": {
+            "from": "09:30",
+            "to": "21:30"
+        },
+        "wed": {
+            "from": "10:00",
+            "to": "22:00"
+        }
+    }
+}
+```  
+Answer without errors: Content Object  
+
+Update Tour
+-------------------------------
+http://api.youch.me/tour/save  
+Method: POST  
+Params:  
+```
+{
+    "id": 14,
+    "title": "Pass2",
+    "description": "ALALA!2",
+    "price_from": 10.05,
+    "price_to": 205.5,
+    "is_free": true / false,
+    "is_tour": true / false,
+    "date_from": "2017-04-12",
+    "date_to": "2017-05-20",
+    "site": "http://site.com/",
+    "phone": "9047946559",
+    "city": {
+        "city": "Брест",
+        "name": "Брест, Беларусь",
+        "lat": 52,
+        "long": 23,
+        "id": "dasndashdkjashd"
+    },
+    "category_ids": [2],
+    "hours": {
+        "mon": {
+            "from": "09:00",
+            "to": "21:00"
+        },
+        "tue": {
+            "from": "09:30",
+            "to": "21:30"
+        },
+        "wed": {
+            "from": "10:00",
+            "to": "22:00"
+        }
+    }
+}
+```  
+Answer without errors: Tour Object  
+
+Set Image
+-------------------------------
+http://api.youch.me/tour/image?id=<tour_id>  
+Method: POST  
+Params: Autorization header  
+Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)  
+Answer without errors: Tour Object  
+
+Delete Image
+-------------------------------
+http://api.youch.me/tour/delete-image?id=<tour_id>  
+Method: POST  
+Params: Autorization header  
+Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)  
+Answer without errors: Tour Object  
+
+Get Comments
+-------------------------------
+http://api.youch.me/content/get-comments?id=<tour_id>&page=1&perpage=10  
+Method: GET
+  
+id is required  
+page is not required (default 1)  
+perpage is not required (default 10)  
+  
+Params:  
+```
+{
+
+}
+```  
+Answer without errors: Tour comment list
+
+Add Comment
+-------------------------------
+http://api.youch.me/tour/add-comment  
+Method: POST  
+Params:  
+```
+{
+    "content_id": 14,
+    "comment": "ALALALALA!"
+}
+```  
+Answer without errors: Tour comment list    
+
+Add Mark
+-------------------------------
+http://api.youch.me/tour/add-mark  
+Method: POST  
+Params:  
+```
+{
+    "content_id": 14,
+    "rating": 3
+}
+```  
+Answer without errors: Tour Object  
+
 
 Black List  
 ==============================

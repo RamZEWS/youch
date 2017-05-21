@@ -3,7 +3,7 @@ namespace api\components;
 
 class DateFormatter {
     const DATE_FORMAT = 'php:Y-m-d';
-    const DATETIME_FORMAT = 'php:c';
+    const DATETIME_FORMAT = 'php:Y-m-d H:i:s';
     const TIME_FORMAT = 'php:H:i:s';
 
     public static function convert($dateStr, $type='datetime', $format = null) {

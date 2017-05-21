@@ -7,7 +7,6 @@ use common\models\Content;
 use common\models\ContentCategory;
 use common\models\WeekDay;
 use common\models\WeekDayContent;
-use yii\web\UploadedFile;
 
 class ContentForm extends Model
 {
@@ -25,7 +24,6 @@ class ContentForm extends Model
     public $site;
     public $phone;
     public $city;
-    public $image;
 
     private $content;
 
@@ -60,10 +58,6 @@ class ContentForm extends Model
                 $this->content->site = $this->site;
                 $this->content->phone = $this->phone;
                 $this->content->city_id = $this->city ? $this->city->id : null;
-
-                $this->uploadImage();
-                $this->content->file_base_url = isset($this->image['base_url']) ? $this->image['base_url'] : null;
-                $this->content->file_url = isset($this->image['file_name']) ? $this->image['file_name'] : null;
 
                 if($this->content->validate() && $this->content->save()) {
                     $this->saveCategories();
@@ -117,24 +111,5 @@ class ContentForm extends Model
                 $new->save();
             }
         }   
-    }
-
-    public function uploadImage(){
-        $model = new UploadForm();
-        $model->file = UploadedFile::getInstanceByName('file');
-        if ($model->file && $model->validate()) {
-            $this->image = $model->saveImage('/upload/content/');
-        }
-        if(!$this->image) {
-            return $model;
-        } else {
-            $this->content = $this->findContent();
-            if($this->content->file_url) {
-                $file = implode('', [$_SERVER['DOCUMENT_ROOT'], $this->content->file_base_url, $this->content->file_url]);
-                if(file_exists($file)) {
-                    unlink($file);
-                }
-            }
-        }
     }
 }

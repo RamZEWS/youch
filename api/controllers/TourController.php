@@ -13,7 +13,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 use common\models\forms\UploadForm;
 
-class ContentController extends BaseAuthActiveController {
+class TourController extends BaseAuthActiveController {
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors['access'] = [
@@ -65,7 +65,7 @@ class ContentController extends BaseAuthActiveController {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         $model = new ContentForm();
         $model->load($bodyParams, '');
-        $model->is_tour = 0;
+        $model->is_tour = 1;
         if ($model->saveContent()) {
             return Content::findOne($model->id);
         } else {
@@ -159,7 +159,7 @@ class ContentController extends BaseAuthActiveController {
                 'defaultPageSize' => $perpage,
             ],
         ]);
-        $activeData->query->where(['status' => Content::STATUS_ACTIVE, 'is_tour' => 0])->orderBy(['created_at' => SORT_DESC]);
+        $activeData->query->where(['status' => Content::STATUS_ACTIVE, 'is_tour' => 1])->orderBy(['created_at' => SORT_DESC]);
         if($category_id) {
             $activeData->query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
         }
@@ -169,7 +169,7 @@ class ContentController extends BaseAuthActiveController {
     public function actionUser($id){
         return Content::find()
                 ->joinWith('user', true)
-                ->where(['user.username' => $id, 'content.status' => Content::STATUS_ACTIVE, 'content.is_tour' => 0])
+                ->where(['user.username' => $id, 'content.status' => Content::STATUS_ACTIVE, 'content.is_tour' => 1])
                 ->orderBy(['created_at' => SORT_DESC])
                 ->all();
     }
