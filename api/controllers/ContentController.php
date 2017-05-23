@@ -67,7 +67,7 @@ class ContentController extends BaseAuthActiveController {
         $model->load($bodyParams, '');
         $model->is_tour = 0;
         if ($model->saveContent()) {
-            return Content::findOne($model->id);
+            return Content::findOne($model->content->id);
         } else {
             return $model;
         }

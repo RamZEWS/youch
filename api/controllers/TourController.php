@@ -65,9 +65,8 @@ class TourController extends BaseAuthActiveController {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         $model = new TourForm();
         $model->load($bodyParams, '');
-        $model->is_tour = 1;
         if ($model->saveContent()) {
-            return Content::findOne($model->id);
+            return Content::findOne($model->content->id);
         } else {
             return $model;
         }

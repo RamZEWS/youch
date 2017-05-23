@@ -1216,13 +1216,13 @@ Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)
     "price_from": 10.05,
     "price_to": 205.5,
     "is_free": true / false,
-    "is_tour": true / false,
-    "date_from": "2017-04-12",
-    "date_to": "2017-05-20",
-    "time_from": "09:00",
-    "time_to": "21:00",
+    "date_from": "2017-04-12", // date format Y-m-d
+    "date_to": "2017-05-20", // date format Y-m-d
+    "time_from": "09:00", // string
+    "time_to": "21:00", // string
     "site": "http://site.com/",
     "phone": "9047946559",
+    "category": {... Category Object ...},
     "city": {
         "city": "Брест",
         "name": "Брест, Беларусь",
@@ -1230,7 +1230,6 @@ Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)
         "long": 23,
         "id": "dasndashdkjashd"
     },
-    "category_ids": [2],
     "hours": {
         "mon": {
             "from": "09:00",
@@ -1263,11 +1262,13 @@ Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)
     "price_from": 10.05,
     "price_to": 205.5,
     "is_free": true / false,
-    "is_tour": true / false,
-    "date_from": "2017-04-12",
-    "date_to": "2017-05-20",
+    "date_from": "2017-04-12", // date format Y-m-d
+    "date_to": "2017-05-20", // date format Y-m-d
+    "time_from": "09:00", // string
+    "time_to": "21:00", // string
     "site": "http://site.com/",
     "phone": "9047946559",
+    "category": {... Category Object ...},
     "city": {
         "city": "Брест",
         "name": "Брест, Беларусь",
@@ -1275,7 +1276,6 @@ Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)
         "long": 23,
         "id": "dasndashdkjashd"
     },
-    "category_ids": [2],
     "hours": {
         "mon": {
             "from": "09:00",
@@ -1472,22 +1472,13 @@ Answer without errors:
             "lng": 26.5
         }
     },
-    "categories": [
-        {
-            "id": 1,
-            "name_ru": "Туризм",
-            "name_en": "Tourism",
-            "created_at": 1492885673,
-            "updated_at": 1492885673
-        },
-        {
-            "id": 2,
-            "name_ru": "Европа",
-            "name_en": "Europe",
-            "created_at": 1492885673,
-            "updated_at": 1492885673
-        }
-    ],
+    "category": {
+        "id": 1,
+        "name_ru": "Туризм",
+        "name_en": "Tourism",
+        "created_at": 1492885673,
+        "updated_at": 1492885673
+    },
     "days": {
         "mon": {
             "from": "09:00",
@@ -1552,22 +1543,13 @@ Answer without errors:
                 "lng": 26.5
             }
         },
-        "categories": [
-            {
-                "id": 1,
-                "name_ru": "Туризм",
-                "name_en": "Tourism",
-                "created_at": 1492885673,
-                "updated_at": 1492885673
-            },
-            {
-                "id": 2,
-                "name_ru": "Европа",
-                "name_en": "Europe",
-                "created_at": 1492885673,
-                "updated_at": 1492885673
-            }
-        ],
+        "category": {
+            "id": 1,
+            "name_ru": "Туризм",
+            "name_en": "Tourism",
+            "created_at": 1492885673,
+            "updated_at": 1492885673
+        },
         "days": {
             "mon": {
                 "from": "09:00",
@@ -1578,12 +1560,13 @@ Answer without errors:
                 "to": "21:00"
             }
         },
-        "price_from": 200.02,
-        "price_to": 201.02,
+        "price": 200.02,
         "is_free": true / false,
         "is_tour": true / false,
-        "date_from": "2017-11-12 12:12:12",
-        "date_to": "2017-12-12 12:12:12",
+        "date_from": "2017-11-12",
+        "date_to": "2017-12-12",
+        "time_from": "09:00",
+        "time_to": "21:00",
         "site": "http://yandex.ru/",
         "phone": "89047946559",
         "city": {
@@ -1610,16 +1593,15 @@ Params:
 {
     "title": "Pass2",
     "description": "ALALA!2",
-    "price_from": 10.05,
-    "price_to": 205.5,
+    "price": 10.05,
     "is_free": true / false,
-    "is_tour": true / false,
-    "date_from": "2017-04-12",
-    "date_to": "2017-05-20",
-    "time_from": "09:00",
-    "time_to": "21:00",
+    "date_from": "2017-04-12", // date format Y-m-d
+    "date_to": "2017-05-20", // date format Y-m-d
+    "time_from": "09:00", // string
+    "time_to": "21:00", // string
     "site": "http://site.com/",
     "phone": "9047946559",
+    "category": {... Category Object ...},
     "city": {
         "city": "Брест",
         "name": "Брест, Беларусь",
@@ -1627,7 +1609,6 @@ Params:
         "long": 23,
         "id": "dasndashdkjashd"
     },
-    "category_ids": [2],
     "hours": {
         "mon": {
             "from": "09:00",
@@ -1656,14 +1637,15 @@ Params:
     "id": 14,
     "title": "Pass2",
     "description": "ALALA!2",
-    "price_from": 10.05,
-    "price_to": 205.5,
+    "price": 10.05,
     "is_free": true / false,
-    "is_tour": true / false,
-    "date_from": "2017-04-12",
-    "date_to": "2017-05-20",
+    "date_from": "2017-04-12", // date format Y-m-d
+    "date_to": "2017-05-20", // date format Y-m-d
+    "time_from": "09:00", // string
+    "time_to": "21:00", // string
     "site": "http://site.com/",
     "phone": "9047946559",
+    "category": {... Category Object ...},
     "city": {
         "city": "Брест",
         "name": "Брест, Беларусь",

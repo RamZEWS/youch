@@ -3,6 +3,7 @@ namespace common\models\forms;
 
 use Yii;
 use yii\base\Model;
+use common\models\Category;
 use common\models\Content;
 use common\models\ContentCategory;
 use common\models\WeekDay;
@@ -24,8 +25,9 @@ class ContentForm extends Model
     public $site;
     public $phone;
     public $city;
+    public $category;
 
-    private $content;
+    public $content;
 
     /**
      * @inheritdoc
@@ -37,7 +39,8 @@ class ContentForm extends Model
             [['is_free', 'is_tour', 'id'], 'integer'],
             [['price_from', 'price_to'], 'double'],
             [['date_from', 'date_to'], 'safe'],
-            [['city'], 'validateCity']
+            [['city'], 'validateCity'],
+            [['category'], 'validateCategory']
         ];
     }
 
@@ -50,7 +53,7 @@ class ContentForm extends Model
                 $this->content->price_from = $this->price_from;
                 $this->content->price_to = $this->price_to;
                 $this->content->is_free = $this->is_free;
-                $this->content->is_free = $this->is_tour;
+                $this->content->is_tour = false;
                 $this->content->date_from = $this->date_from;
                 $this->content->date_to = $this->date_to;
                 $this->content->time_from = $this->time_from;
@@ -84,12 +87,18 @@ class ContentForm extends Model
         return $this;
     }
 
+    public function validateCategory($attribute, $params){
+        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+        if(isset($bodyParams['category']['id'])) {
+            $this->category = Category::findOne($bodyParams['category']['id']);    
+        }
+        return $this;
+    }
+
     public function saveCategories(){
         ContentCategory::deleteAll(['content_id' => $this->content->id]);
-        $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $categories = $bodyParams['category_ids'];
-        foreach($categories as $cID) {
-            $new = new ContentCategory(['category_id' => $cID, 'content_id' => $this->content->id]);
+        if($this->category){
+            $new = new ContentCategory(['category_id' => $this->category->id, 'content_id' => $this->content->id]);
             $new->save();
         }
     }

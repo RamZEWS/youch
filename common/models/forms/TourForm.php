@@ -3,6 +3,7 @@ namespace common\models\forms;
 
 use Yii;
 use yii\base\Model;
+use common\models\Category;
 use common\models\Content;
 use common\models\ContentCategory;
 use common\models\WeekDay;
@@ -23,8 +24,9 @@ class TourForm extends Model
     public $site;
     public $phone;
     public $city;
+    public $category;
 
-    private $content;
+    public $content;
 
     /**
      * @inheritdoc
@@ -34,9 +36,10 @@ class TourForm extends Model
         return [
             [['title', 'description', 'site', 'phone', 'time_from', 'time_to'], 'string'],
             [['is_free', 'is_tour', 'id'], 'integer'],
-            [['price_from'], 'double'],
+            [['price'], 'double'],
             [['date_from', 'date_to'], 'safe'],
-            [['city'], 'validateCity']
+            [['city'], 'validateCity'],
+            [['category'], 'validateCategory']
         ];
     }
 
@@ -48,7 +51,7 @@ class TourForm extends Model
                 $this->content->description = $this->description;
                 $this->content->price_from = $this->price;
                 $this->content->is_free = $this->is_free;
-                $this->content->is_free = $this->is_tour;
+                $this->content->is_tour = true;
                 $this->content->date_from = $this->date_from;
                 $this->content->date_to = $this->date_to;
                 $this->content->time_from = $this->time_from;
@@ -82,12 +85,18 @@ class TourForm extends Model
         return $this;
     }
 
+    public function validateCategory($attribute, $params){
+        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+        if(isset($bodyParams['category']['id'])) {
+            $this->category = Category::findOne($bodyParams['category']['id']);    
+        }
+        return $this;
+    }
+
     public function saveCategories(){
         ContentCategory::deleteAll(['content_id' => $this->content->id]);
-        $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $categories = $bodyParams['category_ids'];
-        foreach($categories as $cID) {
-            $new = new ContentCategory(['category_id' => $cID, 'content_id' => $this->content->id]);
+        if($this->category){
+            $new = new ContentCategory(['category_id' => $this->category->id, 'content_id' => $this->content->id]);
             $new->save();
         }
     }
