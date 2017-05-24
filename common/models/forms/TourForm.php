@@ -116,7 +116,8 @@ class TourForm extends Model
             $weekday = WeekDay::find()->where(['code' => $code])->one();
             if($weekday) {
                 $new = new WeekDayContent();
-                $new->load($hour, '');
+                $new->from = date('H:i', strtotime($hour['from']));
+                $new->to = date('H:i', strtotime($hour['to']));
                 $new->week_day_id = $weekday->id;
                 $new->content_id = $this->content->id;
                 $new->save();
