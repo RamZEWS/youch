@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
  * @property double $price_to
  * @property integer $is_free
  * @property integer $is_tour
+ * @property integer $period
  * @property datetime $date_from
  * @property datetime $date_to
  * @property string $time_from
@@ -60,7 +61,7 @@ class Content extends ActiveRecord
     {
         return [
             [['title', 'description', 'site', 'phone', 'file_base_url', 'file_url', 'time_from', 'time_to'], 'string'],
-            [['user_id', 'city_id', 'status'], 'integer'],
+            [['user_id', 'city_id', 'status', 'period'], 'integer'],
             [['price_from', 'price_to', 'rating'], 'double'],
             [['date_from', 'date_to'], 'safe'],
             ['user_id', 'default', 'value' => Yii::$app->user->id],

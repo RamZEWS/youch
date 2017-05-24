@@ -23,10 +23,6 @@ class Content extends CommonContent {
             'days',
             'is_free',
             'is_tour',
-            'date_from',
-            'date_to',
-            'time_from',
-            'time_to',
             'site',
             'phone',
             'city',
@@ -39,9 +35,15 @@ class Content extends CommonContent {
 
         if($this->is_tour) {
             $fields[] = 'price';
+            $fields[] = 'period';
+            $fields[] = 'dates';
         } else {
             $fields[] = 'price_from';
             $fields[] = 'price_to';
+            $fields[] = 'date_from';
+            $fields[] = 'date_to';
+            $fields[] = 'time_from';
+            $fields[] = 'time_to';
         }
 
         return $fields;
@@ -80,6 +82,17 @@ class Content extends CommonContent {
         $contentDays = WeekDayContent::find()->where(['content_id' => $this->id])->all();
         foreach($contentDays as $d) $days[$d->day->code] = ['name' => $d->day->name_en, 'from' => $d->from, 'to' => $d->to];
         return $days;
+    }
+
+    public function getDates() {
+        $dates = [];
+        $contentDays = TourPeriod::find()->where(['tour_id' => $this->id])->all();
+        foreach($contentDays as $d) {
+            $start = date('c', strtotime($d->date_start));
+            $end = date('c', strtotime('+ '.$this->period.' days', strtotime($start)));
+            $dates[] = ['from' => $start, 'to' => $end];   
+        }
+        return $dates;
     }
 
     public function getUser() {
