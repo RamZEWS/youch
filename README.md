@@ -1563,10 +1563,21 @@ Answer without errors:
         "price": 200.02,
         "is_free": true / false,
         "is_tour": true / false,
-        "date_from": "2017-11-12",
-        "date_to": "2017-12-12",
-        "time_from": "09:00",
-        "time_to": "21:00",
+        "period": 6,
+        "dates": [
+            {
+                "from": "2017-05-29T00:00:00+03:00",
+                "to": "2017-06-04T00:00:00+03:00"
+            },
+            {
+                "from": "2017-06-10T00:00:00+03:00",
+                "to": "2017-06-16T00:00:00+03:00"
+            },
+            {
+                "from": "2017-07-20T00:00:00+03:00",
+                "to": "2017-07-26T00:00:00+03:00"
+            }
+        ],
         "site": "http://yandex.ru/",
         "phone": "89047946559",
         "city": {
@@ -1595,10 +1606,8 @@ Params:
     "description": "ALALA!2",
     "price": 10.05,
     "is_free": true / false,
-    "date_from": "2017-04-12", // date format Y-m-d
-    "date_to": "2017-05-20", // date format Y-m-d
-    "time_from": "09:00", // string
-    "time_to": "21:00", // string
+    "dates":["2017-05-29", "2017-06-10", "2017-07-20"],
+    "period": 6,
     "site": "http://site.com/",
     "phone": "9047946559",
     "category": {... Category Object ...},
@@ -1639,10 +1648,8 @@ Params:
     "description": "ALALA!2",
     "price": 10.05,
     "is_free": true / false,
-    "date_from": "2017-04-12", // date format Y-m-d
-    "date_to": "2017-05-20", // date format Y-m-d
-    "time_from": "09:00", // string
-    "time_to": "21:00", // string
+    "dates":["2017-05-29", "2017-06-10", "2017-07-20"],
+    "period": 6,
     "site": "http://site.com/",
     "phone": "9047946559",
     "category": {... Category Object ...},
