@@ -33,7 +33,8 @@ class TourForm extends Model
     {
         return [
             [['title', 'description', 'site', 'phone'], 'string'],
-            [['is_free', 'is_tour', 'id', 'period'], 'integer'],
+            [['id', 'period'], 'integer'],
+            [['is_free', 'is_tour'], 'boolean'],
             [['price'], 'double'],
             [['city'], 'validateCity'],
             [['category'], 'validateCategory']
