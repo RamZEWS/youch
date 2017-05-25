@@ -56,6 +56,7 @@ $config = [
                 'user/get/<id:[\w-]+>'=>'user/view',
                 
                 'content/user/<id:[\w-]+>'=>'content/user',
+                'tour/user/<id:[\w-]+>'=>'tour/user',
                 'subscription/black-list/<id:[\w-]+>'=>'subscription/black-list',
                 'subscription/followers/<id:[\w-]+>'=>'subscription/followers',
                 'subscription/followings/<id:[\w-]+>'=>'subscription/followings',
