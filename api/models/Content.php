@@ -21,6 +21,8 @@ class Content extends CommonContent {
             'rating',
             'category',
             'days',
+            'date_from',
+            'date_to',
             'is_free',
             'is_tour',
             'site',
@@ -40,8 +42,6 @@ class Content extends CommonContent {
         } else {
             $fields[] = 'price_from';
             $fields[] = 'price_to';
-            $fields[] = 'date_from';
-            $fields[] = 'date_to';
             $fields[] = 'time_from';
             $fields[] = 'time_to';
         }
@@ -53,6 +53,19 @@ class Content extends CommonContent {
         if(in_array($name, ['is_free', 'is_tour'])){
             return (bool)$this->getAttribute($name);
         } else if(in_array($name, ['date_from', 'date_to'])){
+            if($this->is_tour) {
+                $nearestDate = TourPeriod::find()
+                    ->andFilterWhere(['=', 'tour_id', $this->id])
+                    ->andFilterWhere(['>=', 'date_start', date('Y-m-d')])
+                    ->one();
+                if($nearestDate) {
+                    if($name == 'date_from') {
+                        return date('c', strtotime($nearestDate->date_start));
+                    } else if ($name == 'date_to') {
+                        return date('c', strtotime('+ '.$this->period.' days', strtotime($nearestDate->date_start)));
+                    }
+                }
+            }
             return DateFormatter::convert($this->getAttribute($name));
         } else if(in_array($name, ['time_from', 'time_to'])){
             return DateFormatter::convert($this->getAttribute($name), 'time');
