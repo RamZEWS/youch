@@ -1920,7 +1920,7 @@ Params: Content Form or Tour Form (check by user role)
     "site": "http://site.com/",
     "phone": "9047946559",
     "category": {... Category Object ...},
-    "city": {
+    "address": {
         "city": "Брест",
         "name": "Брест, Беларусь",
         "lat": 52,
