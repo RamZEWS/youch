@@ -903,16 +903,30 @@ Answer without errors:
 User contents  
 -------------------------------
 http://api.youch.me/user/content  
-Method: POST  
+Method: GET  
 Params: Authorization Header  
 Answer without errors: List of Content Objects  
 
 User tours  
 -------------------------------
 http://api.youch.me/user/tour  
-Method: POST  
+Method: GET  
 Params: Authorization Header   
 Answer without errors: List of Tour Objects  
+
+User events (by user role)  
+-------------------------------
+http://api.youch.me/user/my-events  
+Method: GET  
+Params: Authorization Header   
+Answer without errors: List of Content or Tour Objects  
+
+User events by username (by user role)  
+-------------------------------
+http://api.youch.me/event/<username>  
+Method: GET  
+Params: Authorization Header   
+Answer without errors: List of Content or Tour Objects  
 
 Cities  
 ===============================
@@ -1790,3 +1804,202 @@ Params:
 }
 ```  
 Answer without errors: your following list  
+
+Events  
+===============================
+Get event List  
+-------------------------------
+http://api.youch.me/event/?category_id=1&page=1&perpage=10  
+Method: GET  
+
+category_id is not required  
+page is not required (default 1)  
+perpage is not required (default 10)  
+
+Answer without errors:  
+```
+{
+    "total": 15,
+    "models": [...Event Object List...]
+}
+```  
+
+Get Event
+-------------------------------
+http://api.youch.me/event/<event_id>
+Method: GET  
+Answer without errors: Event Object  
+
+Get User Event List
+-------------------------------
+http://api.youch.me/event/user/<username>/?page=1&perpage=10  
+Method: GET  
+
+page is not required (default 1)  
+perpage is not required (default 10)  
+
+Answer without errors:  
+```  
+{
+    "total": 15,
+    "models": [...Event Object List...]
+}
+```  
+
+Get My Event List
+-------------------------------
+http://api.youch.me/user/my-events/?page=1&perpage=10  
+Method: GET  
+
+page is not required (default 1)  
+perpage is not required (default 10)  
+
+Answer without errors:  
+```  
+{
+    "total": 15,
+    "models": [...Event Object List...]
+}
+```  
+
+Create Event
+-------------------------------
+http://api.youch.me/event/save  
+Method: POST  
+Params: Content Form or Tour Form (check by user role)  
+```
+{
+    "title": "Pass2",
+    "description": "ALALA!2",
+    "price": 10.05,
+    "is_free": true / false,
+    "dates":["2017-05-29", "2017-06-10", "2017-07-20"],
+    "period": 6,
+    "site": "http://site.com/",
+    "phone": "9047946559",
+    "category": {... Category Object ...},
+    "address": {
+        "city": "Брест",
+        "name": "Брест, Беларусь, ул. Ленина, д.10",
+        "lat": 52,
+        "long": 23,
+        "id": "dasndashdkjashd"
+    },
+    "hours": {
+        "mon": {
+            "from": "09:00",
+            "to": "21:00"
+        },
+        "tue": {
+            "from": "09:30",
+            "to": "21:30"
+        },
+        "wed": {
+            "from": "10:00",
+            "to": "22:00"
+        }
+    }
+}
+```  
+Answer without errors: Content or Tour object  
+
+Update Event
+-------------------------------
+http://api.youch.me/event/save  
+Method: POST  
+Params: Content Form or Tour Form (check by user role)  
+```
+{
+    "id": 14,
+    "title": "Pass2",
+    "description": "ALALA!2",
+    "price": 10.05,
+    "is_free": true / false,
+    "dates":["2017-05-29", "2017-06-10", "2017-07-20"],
+    "period": 6,
+    "site": "http://site.com/",
+    "phone": "9047946559",
+    "category": {... Category Object ...},
+    "city": {
+        "city": "Брест",
+        "name": "Брест, Беларусь",
+        "lat": 52,
+        "long": 23,
+        "id": "dasndashdkjashd"
+    },
+    "category_ids": [2],
+    "hours": {
+        "mon": {
+            "from": "09:00",
+            "to": "21:00"
+        },
+        "tue": {
+            "from": "09:30",
+            "to": "21:30"
+        },
+        "wed": {
+            "from": "10:00",
+            "to": "22:00"
+        }
+    }
+}
+```  
+Answer without errors: Content or Tour object  
+
+Set Image
+-------------------------------
+http://api.youch.me/event/image?id=<event_id>  
+Method: POST  
+Params: Autorization header  
+Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)  
+Answer without errors: Tour Object  
+
+Delete Image
+-------------------------------
+http://api.youch.me/event/delete-image?id=<event_id>  
+Method: POST  
+Params: Autorization header  
+Image must be set by form data with name=file (extensions gif, jpg, png, jpeg)  
+Answer without errors: Tour Object  
+
+Get Comments
+-------------------------------
+http://api.youch.me/event/get-comments?id=<event_id>&page=1&perpage=10  
+Method: GET
+  
+id is required  
+page is not required (default 1)  
+perpage is not required (default 10)    
+Answer without errors:  
+```
+{
+    "total": 15,
+    "models": [...Comment Object List...]
+}
+```
+
+Add Comment
+-------------------------------
+http://api.youch.me/event/add-comment  
+Method: POST  
+Params:  
+```
+{
+    "content_id": 14,
+    "comment": "ALALALALA!"
+}
+```  
+Answer without errors: Comment Object List    
+
+Add Mark
+-------------------------------
+http://api.youch.me/event/add-mark  
+Method: POST  
+Params:  
+```
+{
+    "content_id": 14,
+    "rating": 3
+}
+```  
+Answer without errors: Event Object  

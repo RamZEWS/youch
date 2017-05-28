@@ -15,6 +15,7 @@ use common\models\forms\ChangeProfileAlertsForm;
 use common\models\forms\ImageBase64Form;
 use common\models\forms\UploadForm;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
 
 class UserController extends BaseAuthController {
 
@@ -28,7 +29,7 @@ class UserController extends BaseAuthController {
                     'allow' => true,
                 ],
                 [
-                    'actions' => ['profile', 'content', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete', 'all-comments', 'my-comments', 'to-me-comments', 'to-my-contents', 'to-my-tours'],
+                    'actions' => ['profile', 'content', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete', 'all-comments', 'my-comments', 'to-me-comments', 'to-my-contents', 'to-my-tours', 'tour', 'my-events'],
                     'allow' => true,
                     'roles' => ['@'],
                 ]
@@ -40,6 +41,8 @@ class UserController extends BaseAuthController {
                 'profile' => ['GET'],
                 'view' => ['GET'],
                 'content' => ['GET'],
+                'tour' => ['GET'],
+                'my-events' => ['GET'],
                 'black-list' => ['GET'],
                 'followers' => ['GET'],
                 'followings' => ['GET'],
@@ -159,12 +162,30 @@ class UserController extends BaseAuthController {
         return $user;
     }
 
+    public function actionMyEvents($page = 1, $perpage = 10){
+        $where = ['user_id' => Yii::$app->user->id, 'is_tour' => 0];
+        if(Yii::$app->user->can('moderator')) $where['is_tour'] = 1;        
+        $activeData = new ActiveDataProvider([
+            'query' => Content::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query->where($where)->orderBy(['created_at' => SORT_DESC]);
+        return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
+    }    
+
     public function actionContent(){
-        return Content::find()->where(['user_id' => Yii::$app->user->id, 'is_tour' => 0])->orderBy(['created_at' => SORT_DESC])->all();
+        $where = ['user_id' => Yii::$app->user->id, 'is_tour' => 0];
+        //if(Yii::$app->user->can('moderator')) $where['is_tour'] = 1;
+        return Content::find()->where($where)->orderBy(['created_at' => SORT_DESC])->all();
     }
 
     public function actionTour(){
-        return Content::find()->where(['user_id' => Yii::$app->user->id, 'is_tour' => 1])->orderBy(['created_at' => SORT_DESC])->all();
+        $where = ['user_id' => Yii::$app->user->id, 'is_tour' => 1];
+        //if(!Yii::$app->user->can('moderator')) $where['is_tour'] = 0;
+        return Content::find()->where($where)->orderBy(['created_at' => SORT_DESC])->all();
     }
 
     public function actionAllComments(){

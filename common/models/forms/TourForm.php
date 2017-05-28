@@ -21,7 +21,7 @@ class TourForm extends Model
     public $period;
     public $site;
     public $phone;
-    public $city;
+    public $address;
     public $category;
 
     public $content;
@@ -36,7 +36,7 @@ class TourForm extends Model
             [['id', 'period'], 'integer'],
             [['is_free', 'is_tour'], 'boolean'],
             [['price'], 'double'],
-            [['city'], 'validateCity'],
+            [['address'], 'validateAddress'],
             [['category'], 'validateCategory']
         ];
     }
@@ -53,7 +53,8 @@ class TourForm extends Model
                 $this->content->period = $this->period;
                 $this->content->site = $this->site;
                 $this->content->phone = $this->phone;
-                $this->content->city_id = $this->city ? $this->city->id : null;
+                $this->content->city_id = Yii::$app->user->identity->city_id;
+                $this->content->address_id = $this->address ? $this->address->id : null;
 
                 if($this->content->validate() && $this->content->save()) {
                     $this->savePeriods();
@@ -73,11 +74,12 @@ class TourForm extends Model
         }
     }
 
-    public function validateCity($attribute, $params){
+    public function validateAddress($attribute, $params){
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         $model = new GoogleCityForm();
-        $model->load($bodyParams['city'], '');
-        $this->city = $model->getOrCreate();
+        $model->load($bodyParams['address'], '');
+        $model->model = 'common\models\Address'; 
+        $this->address = $model->getOrCreate();
         return $this;
     }
 

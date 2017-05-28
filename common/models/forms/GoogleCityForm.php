@@ -4,12 +4,11 @@ namespace common\models\forms;
 use Yii;
 use yii\base\Model;
 use common\models\City;
+use common\models\Address;
 
-/**
- * Login form
- */
 class GoogleCityForm extends Model
 {
+    public $model;
     public $city;
     public $name;
     public $id;
@@ -22,7 +21,7 @@ class GoogleCityForm extends Model
     public function rules()
     {
         return [
-            [['city', 'name', 'id'], 'string'],
+            [['city', 'name', 'id', 'model'], 'string'],
             [['city', 'name', 'id'], 'required'],
             [['lat', 'long'], 'double']
         ];
@@ -30,20 +29,21 @@ class GoogleCityForm extends Model
 
     public function getOrCreate(){
         if ($this->validate()) {
-            $city = City::find()->where(['google_id' => $this->id])->one();
-            if(!$city) {
-                $city = new City([
+            $modelName = $this->model ?: 'common\models\City';
+            $item = $modelName::find()->where(['google_id' => $this->id])->one();
+            if(!$item) {
+                $item = new $modelName([
                     'name' => $this->name,
                     'city' => $this->city,
                     'google_id' => $this->id,
                     'lat' => $this->lat,
                     'lng' => $this->long
                 ]);
-                if($city->validate()) {
-                    $city->save();
+                if($item->validate()) {
+                    $item->save();
                 }
             }
-            return $city;
+            return $item;
         }
         return false;
     }

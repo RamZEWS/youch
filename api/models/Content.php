@@ -28,6 +28,7 @@ class Content extends CommonContent {
             'site',
             'phone',
             'city',
+            'address',
             'state',
             'file',
             'counts',
@@ -83,6 +84,10 @@ class Content extends CommonContent {
 
     public function getCity(){
         return $this->hasOne(City::className(), ['id' => 'city_id']);
+    } 
+
+    public function getAddress(){
+        return $this->hasOne(Address::className(), ['id' => 'address_id']);
     }
 
     public function getCategory() {
