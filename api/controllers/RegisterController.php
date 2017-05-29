@@ -37,6 +37,7 @@ class RegisterController extends BaseAuthController {
                 'step2' => ['post'],
                 'step3' => ['post'],
                 'step4' => ['post'],
+                '' => ['options']
             ],
         ];
 
