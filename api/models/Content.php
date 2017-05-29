@@ -98,7 +98,13 @@ class Content extends CommonContent {
     public function getDays() {
         $days = [];
         $contentDays = WeekDayContent::find()->where(['content_id' => $this->id])->all();
-        foreach($contentDays as $d) $days[$d->day->code] = ['name' => $d->day->name_en, 'from' => $d->from, 'to' => $d->to];
+        foreach($contentDays as $d) {
+            $days[$d->day->code] = [
+                'name' => $d->day->name_en, 
+                'from' => date('c', strtotime($d->from)), 
+                'to' => date('c', strtotime($d->to))
+            ];
+        }
         return $days;
     }
 
