@@ -42,7 +42,8 @@ class BaseAuthController extends \yii\rest\Controller
         ];
         return ArrayHelper::merge($behaviors, [
             'authenticator' => [
-                'class' => HttpBearerAuth::className()
+                'class' => HttpBearerAuth::className(),
+                'except' => ['OPTIONS']
             ],
             'exceptionFilter' => [
                 'class' => ErrorToExceptionFilter::className()
