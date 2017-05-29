@@ -28,10 +28,10 @@ class BaseAuthController extends \yii\rest\Controller
             'class' => \yii\filters\Cors::className(),
             'cors' => [
                 // restrict access to
-                'Access-Control-Allow-Origin' => ['*'],
+                'Origin' => [''],
                 'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
                 // Allow only POST and PUT methods
-                'Access-Control-Request-Headers' => ['*'],
+                'Access-Control-Allow-Headers' => ['*'],
                 // Allow only headers 'X-Wsse'
                 'Access-Control-Allow-Credentials' => true,
                 // Allow OPTIONS caching
