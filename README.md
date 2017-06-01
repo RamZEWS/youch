@@ -2003,3 +2003,22 @@ Params:
 }
 ```  
 Answer without errors: Event Object  
+
+Search
+====================================
+By city
+-------------------------------
+http://api.youch.me/search/by-city/?id=<google_id>&page=1&perpage=10  
+Method: GET  
+
+id is required  
+page is not required (default 1)  
+perpage is not required (default 10) 
+
+Answer without errors:   
+```
+{
+    "total": 15,
+    "models": [...Tour Object List...]
+}
+```  
