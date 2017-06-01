@@ -31,7 +31,7 @@ class UserController extends BaseAuthController {
                 [
                     'actions' => ['profile', 'content', 'avatar', 'delete-avatar', 'change-password', 'change-profile', 'change-alerts', 'black-list', 'followers', 'followings', 'delete', 'all-comments', 'my-comments', 'to-me-comments', 'to-my-contents', 'to-my-tours', 'tour', 'my-events'],
                     'allow' => true,
-                    'roles' => ['@'],
+                    'roles' => ['user'],
                 ]
             ],
         ];
