@@ -15,4 +15,12 @@ class ContentCategory extends CommonContentCategory {
             'updated_at'
         ];
     }
+
+    public function getCategory() {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    public function getContent() {
+        return $this->hasOne(Content::className(), ['id' => 'content_id']);
+    }
 }
