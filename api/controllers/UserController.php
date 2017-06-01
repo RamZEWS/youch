@@ -101,9 +101,11 @@ class UserController extends BaseAuthController {
 
     private function deleteAvatar(){
         $identity = Yii::$app->user->identity;
-        $filepath = implode('', [$_SERVER['DOCUMENT_ROOT'], $identity->avatar_base_url, $identity->avatar_url]);
-        if (file_exists($filepath)) {
-            unlink($filepath);
+	if($identity->avatar_base_url){
+            $filepath = implode('', [$_SERVER['DOCUMENT_ROOT'], $identity->avatar_base_url, $identity->avatar_url]);
+            if (file_exists($filepath)) {
+		unlink($filepath);
+            }
         }
     }
 
