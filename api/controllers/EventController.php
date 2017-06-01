@@ -183,4 +183,11 @@ class EventController extends BaseAuthActiveController {
         }
         return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
     }
+
+    protected function findContent($id){
+        if (($model = Content::findOne($id)) !== null) {
+            return $model;
+        }
+        return false;
+    }
 }
