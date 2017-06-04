@@ -102,29 +102,33 @@ class TourForm extends Model
     public function savePeriods(){
         TourPeriod::deleteAll(['tour_id' => $this->content->id]);
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $dates = $bodyParams['dates'];
-        foreach($dates as $date) {
-            $new = new TourPeriod();
-            $new->date_start = date('Y-m-d H:i:s', strtotime($date));
-            $new->tour_id = $this->content->id;
-            $new->save();
-        }   
+	if(isset($bodyParams['dates'])){
+            $dates = $bodyParams['dates'];
+            foreach($dates as $date) {
+                $new = new TourPeriod();
+                $new->date_start = date('Y-m-d H:i:s', strtotime($date));
+                $new->tour_id = $this->content->id;
+                $new->save();
+            }
+	}
     }
 
     public function saveHours(){
         WeekDayContent::deleteAll(['content_id' => $this->content->id]);
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
-        $hours = $bodyParams['hours'];
-        foreach($hours as $code => $hour) {
-            $weekday = WeekDay::find()->where(['code' => $code])->one();
-            if($weekday) {
-                $new = new WeekDayContent();
-                $new->from = date('H:i', strtotime($hour['from']));
-                $new->to = date('H:i', strtotime($hour['to']));
-                $new->week_day_id = $weekday->id;
-                $new->content_id = $this->content->id;
-                $new->save();
+        if(isset($bodyParams['days'])){
+            $hours = $bodyParams['days'];
+            foreach($hours as $code => $hour) {
+                $weekday = WeekDay::find()->where(['code' => $code])->one();
+                if($weekday) {
+                    $new = new WeekDayContent();
+                    $new->from = date('H:i', strtotime($hour['from']));
+                    $new->to = date('H:i', strtotime($hour['to']));
+                    $new->week_day_id = $weekday->id;
+                    $new->content_id = $this->content->id;
+                    $new->save();
+                }
             }
-        }   
+	}
     }
 }

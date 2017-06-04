@@ -63,6 +63,7 @@ $config = [
                 'subscription/followings/<id:[\w-]+>'=>'subscription/followings',
                 'comment/user/<id:[\w-]+>'=>'comment/user',
                 'comment/to-user/<id:[\w-]+>'=>'comment/to-user',
+		'event/image/<id:\d+>' => 'event/image',
 
                 '<controller:[\w-]+>/?'=>'<controller>/index',
                 '<controller:[\w-]+>/<id:\d+>'=>'<controller>/view',

@@ -43,6 +43,8 @@ class EventController extends BaseAuthActiveController {
                 'user' => ['GET'],
                 'get-comments' => ['GET'],
                 'save' => ['POST'],
+		'image' => ['POST'],
+		'delete-image' => ['POST']
             ],
         ];
 
@@ -61,7 +63,7 @@ class EventController extends BaseAuthActiveController {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         $model = new EventForm();
         $model->load($bodyParams, '');
-        if ($id = $model->saveEvent()) {
+	if ($id = $model->saveEvent()) {
             return Content::findOne($id);
         } else {
             return $model;
