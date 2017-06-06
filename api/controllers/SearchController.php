@@ -22,7 +22,7 @@ class SearchController extends BaseAuthController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
-                    'actions' => ['by-city'],
+                    'actions' => ['by-city', 'tour'],
                     'allow' => true
                 ]
             ],
@@ -31,6 +31,7 @@ class SearchController extends BaseAuthController {
             'class' => VerbFilter::className(),
             'actions' => [
                 'by-city' => ['GET'],
+                'tour' => ['GET'],
             ],
         ];
 
@@ -46,6 +47,24 @@ class SearchController extends BaseAuthController {
             ],
         ]);
         $activeData->query->joinWith('city', true)->where(['city.google_id' => $id, 'content.is_tour' => true]);
+        return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
+    }
+
+    public function actionTour($category_id = null, $city_id = null, $page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => Content::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query->where(['content.is_tour' => true]);
+        if($city_id) {
+            $activeData->query->joinWith('city', true)->where(['city.google_id' => $city_id]);
+        }
+        if($category_id) {
+            $activeData->query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
+        }
         return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
     }
 }
