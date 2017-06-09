@@ -25,6 +25,10 @@ $config = [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'nullDisplay' => null,
+        ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,

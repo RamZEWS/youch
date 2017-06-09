@@ -113,8 +113,8 @@ class Content extends CommonContent {
         $contentDays = TourPeriod::find()->where(['tour_id' => $this->id])->all();
         foreach($contentDays as $d) {
             $start = date('c', strtotime($d->date_start));
-            $end = date('c', strtotime('+ '.$this->period.' days', strtotime($start)));
-            $dates[] = ['from' => $start, 'to' => $end];   
+            //$end = date('c', strtotime('+ '.$this->period.' days', strtotime($start)));
+            $dates[] = $start;//['from' => $start, 'to' => $end];   
         }
         return $dates;
     }

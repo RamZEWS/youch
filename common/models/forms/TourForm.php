@@ -54,7 +54,9 @@ class TourForm extends Model
                 $this->content->site = $this->site;
                 $this->content->phone = $this->phone;
                 $this->content->city_id = Yii::$app->user->identity->city_id;
-                $this->content->address_id = $this->address ? $this->address->id : null;
+                if($this->address) {
+                    $this->content->address_id = $this->address->id;
+                }
 
                 if($this->content->validate() && $this->content->save()) {
                     $this->savePeriods();
