@@ -27,7 +27,7 @@ $config = [
         ],
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
-            'nullDisplay' => null,
+            'nullDisplay' => '',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
