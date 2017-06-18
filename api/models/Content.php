@@ -19,6 +19,7 @@ class Content extends CommonContent {
             'description',
             'user',
             'rating',
+            'ratings',
             'category',
             'days',
             'date_from',
@@ -128,5 +129,26 @@ class Content extends CommonContent {
             'ratings' => ContentRating::find()->where(['content_id' => $this->id])->count(),
             'comments' => ContentComment::find()->where(['content_id' => $this->id])->count(),
         ];
+    }
+
+    public function getRatings() {
+        $models = ContentRating::find()->where(['content_id' => $this->id])->orderBy(['rating' => SORT_DESC])->all();
+        if($models) {
+            $arr = [];
+            $total = 0;
+            foreach($models as $m){
+                if(!isset($arr[$m->rating])) $arr[$m->rating] = 0;
+                $arr[$m->rating] = $arr[$m->rating] + 1;
+                $total++;
+            }
+
+            $result = [];
+            foreach($arr as $rating => $count) {
+                $percent = ($count * 100) / $total;
+                $result[$rating] = ['count' => $count, 'percent' => $percent];
+            }
+            return $result;
+        }
+        return null;
     }
 }

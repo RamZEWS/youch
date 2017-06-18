@@ -63,7 +63,7 @@ class EventController extends BaseAuthActiveController {
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         $model = new EventForm();
         $model->load($bodyParams, '');
-	if ($id = $model->saveEvent()) {
+	    if ($id = $model->saveEvent()) {
             return Content::findOne($id);
         } else {
             return $model;
@@ -88,19 +88,9 @@ class EventController extends BaseAuthActiveController {
             ],
         ]);
         $activeData->query->where($where)->orderBy(['created_at' => SORT_DESC]);
-        return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
-    }
 
-    public function actionGetComments($id, $page = 1, $perpage = 10){
-        $activeData = new ActiveDataProvider([
-            'query' => ContentComment::find(),
-            'pagination' => [
-                'defaultPageSize' => $perpage,
-                'validatePage' => false
-            ],
-        ]);
-        $activeData->query->select(['id', 'comment', 'user_id', 'created_at', 'updated_at'])->where(['content_id' => $id])->orderBy(['created_at' => SORT_DESC]);
-        return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
     public function actionImage($id){
@@ -183,7 +173,9 @@ class EventController extends BaseAuthActiveController {
         if($category_id) {
             $activeData->query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
         }
-        return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
     protected function findContent($id){

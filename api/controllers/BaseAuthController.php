@@ -50,4 +50,18 @@ class BaseAuthController extends \yii\rest\Controller
             ],
         ]);
     }
+
+    public function getPagination($total, $page, $perpage){
+        $is_first = ($page == 1);
+
+        $pages = ceil($total / $perpage);
+        $is_last = ($page == $pages);
+        return [
+            'total' => $total,
+            'current_page' => $page,
+            'perpage' => $perpage,
+            'is_first' => $is_first,
+            'is_last' => $is_last
+        ];
+    }
 }
