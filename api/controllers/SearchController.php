@@ -47,7 +47,8 @@ class SearchController extends BaseAuthController {
             ],
         ]);
         $activeData->query->joinWith('city', true)->where(['city.google_id' => $id, 'content.is_tour' => true]);
-        return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
     public function actionTour($category_id = null, $city_id = null, $page = 1, $perpage = 10){
@@ -65,6 +66,7 @@ class SearchController extends BaseAuthController {
         if($category_id) {
             $activeData->query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
         }
-        return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 }
