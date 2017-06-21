@@ -13,8 +13,6 @@ use yii\db\ActiveRecord;
  * @property text $comment
  * @property integer $comment_id
  * @property double $rating
- * @property string $file_base_url
- * @property string $file_url
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -45,7 +43,7 @@ class ContentComment extends ActiveRecord
     {
         return [
             [['user_id', 'content_id', 'comment_id'], 'integer'],
-            [['comment', 'file_base_url', 'file_url'], 'string'],
+            [['comment'], 'string'],
             [['rating'], 'double'],
             [['user_id'], 'default', 'value' => Yii::$app->user->id]
         ];
@@ -61,12 +59,5 @@ class ContentComment extends ActiveRecord
 
     public function getComment() {
         return $this->hasOne(self::className(), ['id' => 'comment_id']);
-    }
-
-    public function getFile(){
-        if($this->file_base_url) {
-            return implode('', [$this->file_base_url, $this->file_url]);
-        }
-        return null;
     }
 }

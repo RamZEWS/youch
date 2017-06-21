@@ -10,6 +10,7 @@ use api\models\BlackList;
 use api\models\UserSubscription;
 use api\models\ContentComment;
 use api\models\CommentRating;
+use api\models\CommentFiles;
 use common\models\forms\ChangePasswordForm;
 use common\models\forms\ChangeProfileForm;
 use common\models\forms\ChangeProfileAlertsForm;
@@ -114,25 +115,32 @@ class CommentController extends BaseAuthController {
     public function actionImage($id){
         $comment = ContentComment::findOne($id);
         if($comment) {
-            $image = null;
+            $images = null;
             $model = new UploadForm();
-            $model->file = UploadedFile::getInstanceByName('file');
-            if ($model->file && $model->validate()) {
-                $image = $model->saveImage('/upload/comments/');
+            $model->files = UploadedFile::getInstancesByName('file');
+            if ($model->files && $model->validate()) {
+                $images = $model->saveImage('/upload/comments/', true);
             }
-            if(!$image) {
+            if(!$images) {
                 return $model;
             } else {
-                if($comment->file_url) {
-                    $file = implode('', [$_SERVER['DOCUMENT_ROOT'], $comment->file_base_url, $comment->file_url]);
-                    if(file_exists($file)) {
-                        unlink($file);
+                $models = CommentFiles::find()->where(['comment_id' => $comment->id])->all();
+                if($models) {
+                    foreach($models as $m) {
+                        $file = implode('', [$_SERVER['DOCUMENT_ROOT'], $m->file_base_url, $m->file_url]);
+                        if(file_exists($file)) {
+                            unlink($file);
+                        }
                     }
+                    CommentFiles::deleteAll(['comment_id' => $comment->id]);
                 }
-                $comment->file_base_url = $image['base_url'];
-                $comment->file_url = $image['file_name'];
-                $comment->save();
-                return $comment;
+                foreach($images as $img) {
+                    $model = new CommentFiles(['comment_id' => $comment->id]);
+                    $model->file_base_url = $img['base_url'];
+                    $model->file_url = $img['file_name'];
+                    $model->save();
+                }
+                return ContentComment::findOne($id);
             }
         }
     }

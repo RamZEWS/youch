@@ -101,10 +101,10 @@ class UserController extends BaseAuthController {
 
     private function deleteAvatar(){
         $identity = Yii::$app->user->identity;
-	if($identity->avatar_base_url){
+	    if($identity->avatar_base_url){
             $filepath = implode('', [$_SERVER['DOCUMENT_ROOT'], $identity->avatar_base_url, $identity->avatar_url]);
             if (file_exists($filepath)) {
-		unlink($filepath);
+		        unlink($filepath);
             }
         }
     }
@@ -142,16 +142,46 @@ class UserController extends BaseAuthController {
         }
     }
 
-    public function actionBlackList(){
-        return BlackList::find()->where(['user_id' => Yii::$app->user->id])->orderBy(['created_at' => SORT_DESC])->select(['id', 'block_id', 'created_at', 'updated_at'])->all();
+    public function actionBlackList($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => BlackList::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query->where(['user_id' => Yii::$app->user->id])->select(['id', 'block_id', 'created_at', 'updated_at'])->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
-    public function actionFollowers(){
-        return UserSubscription::find()->where(['follower_id' => Yii::$app->user->id])->orderBy(['created_at' => SORT_DESC])->select(['id', 'user_id', 'created_at', 'updated_at'])->all();
+    public function actionFollowers($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => UserSubscription::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query->where(['follower_id' => Yii::$app->user->id])->select(['id', 'user_id', 'created_at', 'updated_at'])->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
-    public function actionFollowings(){
-        return UserSubscription::find()->where(['user_id' => Yii::$app->user->id])->orderBy(['created_at' => SORT_DESC])->select(['id', 'follower_id', 'created_at', 'updated_at'])->all();
+    public function actionFollowings($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => UserSubscription::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query->where(['user_id' => Yii::$app->user->id])->select(['id', 'follower_id', 'created_at', 'updated_at'])->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
     public function actionDelete(){
@@ -175,59 +205,93 @@ class UserController extends BaseAuthController {
             ],
         ]);
         $activeData->query->where($where)->orderBy(['created_at' => SORT_DESC]);
-        return ['total' => $activeData->getTotalCount(), 'models' => $activeData->getModels()];
-    }    
-
-    public function actionContent(){
-        $where = ['user_id' => Yii::$app->user->id, 'is_tour' => 0];
-        //if(Yii::$app->user->can('moderator')) $where['is_tour'] = 1;
-        return Content::find()->where($where)->orderBy(['created_at' => SORT_DESC])->all();
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
-    public function actionTour(){
-        $where = ['user_id' => Yii::$app->user->id, 'is_tour' => 1];
-        //if(!Yii::$app->user->can('moderator')) $where['is_tour'] = 0;
-        return Content::find()->where($where)->orderBy(['created_at' => SORT_DESC])->all();
-    }
-
-    public function actionAllComments(){
-        return ContentComment::find()
+    public function actionAllComments($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => ContentComment::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query
                 ->joinWith('content', true)
                 ->orFilterWhere(['content_comment.user_id' => Yii::$app->user->id])
                 ->orFilterWhere(['content.user_id' => Yii::$app->user->id])
-                ->orderBy(['created_at' => SORT_DESC])
-                ->all();
+                ->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
-    public function actionMyComments(){
-        return ContentComment::find()
+    public function actionMyComments($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => ContentComment::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query
                 ->andFilterWhere(['user_id' => Yii::$app->user->id])
-                ->orderBy(['created_at' => SORT_DESC])
-                ->all();   
+                ->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
-    public function actionToMeComments(){
-        return ContentComment::find()
+    public function actionToMeComments($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => ContentComment::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query
                 ->joinWith('content', true)
                 ->andFilterWhere(['content.user_id' => Yii::$app->user->id])
-                ->orderBy(['created_at' => SORT_DESC])
-                ->all();
+                ->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
-    public function actionToMyContents(){
-        return ContentComment::find()
+    public function actionToMyContents($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => ContentComment::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query
                 ->joinWith('content', true)
                 ->andFilterWhere(['content.user_id' => Yii::$app->user->id, 'content.is_tour' => 0])
-                ->orderBy(['created_at' => SORT_DESC])
-                ->all();
+                ->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
-    public function actionToMyTours(){
-        return ContentComment::find()
+    public function actionToMyTours($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => ContentComment::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query
                 ->joinWith('content', true)
                 ->andFilterWhere(['content.user_id' => Yii::$app->user->id, 'content.is_tour' => 1])
-                ->orderBy(['created_at' => SORT_DESC])
-                ->all();
+                ->orderBy(['created_at' => SORT_DESC]);
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
 }

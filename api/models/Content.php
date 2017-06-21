@@ -2,6 +2,7 @@
 
 namespace api\models;
 
+use Yii;
 use common\models\Content as CommonContent;
 use api\components\DateFormatter;
 
@@ -20,6 +21,7 @@ class Content extends CommonContent {
             'user',
             'rating',
             'ratings',
+            'my_rating',
             'category',
             'days',
             'date_from',
@@ -71,6 +73,13 @@ class Content extends CommonContent {
             return DateFormatter::convert($this->getAttribute($name));
         } else if(in_array($name, ['time_from', 'time_to'])){
             return DateFormatter::convert($this->getAttribute($name), 'time');
+        } else if(in_array($name, ['my_rating'])){
+            $rating = null;
+            if(Yii::$app->user->id){
+                $model = ContentRating::find()->where(['user_id' => Yii::$app->user->id, 'content_id' => $this->id])->one();
+                if($model) $rating = $model->rating;
+            }
+            return $rating;
         }
         return parent::__get($name);
     }
