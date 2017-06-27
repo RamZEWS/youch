@@ -19,6 +19,7 @@ class TourForm extends Model
     public $is_free;
     public $is_tour;
     public $period;
+    public $period_type;
     public $site;
     public $phone;
     public $address;
@@ -32,12 +33,13 @@ class TourForm extends Model
     public function rules()
     {
         return [
-            [['title', 'description', 'site', 'phone'], 'string'],
+            [['title', 'description', 'site', 'phone', 'period_type'], 'string'],
             [['id', 'period'], 'integer'],
             [['is_free', 'is_tour'], 'boolean'],
             [['price'], 'double'],
             [['address'], 'validateAddress'],
-            [['category'], 'validateCategory']
+            [['category'], 'validateCategory'],
+            ['period_type', 'in', 'range' => ['day', 'hour']],
         ];
     }
 
@@ -51,6 +53,7 @@ class TourForm extends Model
                 $this->content->is_free = $this->is_free;
                 $this->content->is_tour = true;
                 $this->content->period = $this->period;
+                $this->content->period_type = $this->period_type;
                 $this->content->site = $this->site;
                 $this->content->phone = $this->phone;
                 $this->content->city_id = Yii::$app->user->identity->city_id;
@@ -104,15 +107,17 @@ class TourForm extends Model
     public function savePeriods(){
         TourPeriod::deleteAll(['tour_id' => $this->content->id]);
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
-	if(isset($bodyParams['dates'])){
+	    if(isset($bodyParams['dates'])){
             $dates = $bodyParams['dates'];
             foreach($dates as $date) {
-                $new = new TourPeriod();
-                $new->date_start = date('Y-m-d H:i:s', strtotime($date));
-                $new->tour_id = $this->content->id;
-                $new->save();
+                if($date){
+                    $new = new TourPeriod();
+                    $new->date_start = date('Y-m-d H:i:s', strtotime($date));
+                    $new->tour_id = $this->content->id;
+                    $new->save();
+                }
             }
-	}
+	    }
     }
 
     public function saveHours(){
@@ -123,14 +128,16 @@ class TourForm extends Model
             foreach($hours as $code => $hour) {
                 $weekday = WeekDay::find()->where(['code' => $code])->one();
                 if($weekday) {
-                    $new = new WeekDayContent();
-                    $new->from = date('H:i', strtotime($hour['from']));
-                    $new->to = date('H:i', strtotime($hour['to']));
-                    $new->week_day_id = $weekday->id;
-                    $new->content_id = $this->content->id;
-                    $new->save();
+                    if($hour['from']){
+                        $new = new WeekDayContent();
+                        $new->from = date('H:i', strtotime($hour['from']));
+                        $new->to = date('H:i', strtotime($hour['to']));
+                        $new->week_day_id = $weekday->id;
+                        $new->content_id = $this->content->id;
+                        $new->save();
+                    }
                 }
             }
-	}
+	    }
     }
 }

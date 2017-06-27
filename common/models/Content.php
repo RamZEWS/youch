@@ -18,6 +18,7 @@ use yii\db\ActiveRecord;
  * @property integer $is_free
  * @property integer $is_tour
  * @property integer $period
+ * @property string $period_type
  * @property datetime $date_from
  * @property datetime $date_to
  * @property string $time_from
@@ -61,7 +62,7 @@ class Content extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'description', 'site', 'phone', 'file_base_url', 'file_url', 'time_from', 'time_to'], 'string'],
+            [['title', 'description', 'site', 'phone', 'file_base_url', 'file_url', 'time_from', 'time_to', 'period_type'], 'string'],
             [['user_id', 'city_id', 'address_id', 'status', 'period'], 'integer'],
             [['price_from', 'price_to', 'rating'], 'double'],
             [['date_from', 'date_to'], 'safe'],

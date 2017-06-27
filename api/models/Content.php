@@ -42,6 +42,7 @@ class Content extends CommonContent {
         if($this->is_tour) {
             $fields[] = 'price';
             $fields[] = 'period';
+            $fields[] = 'period_type';
             $fields[] = 'dates';
         } else {
             $fields[] = 'price_from';
@@ -66,7 +67,8 @@ class Content extends CommonContent {
                     if($name == 'date_from') {
                         return date('c', strtotime($nearestDate->date_start));
                     } else if ($name == 'date_to') {
-                        return date('c', strtotime('+ '.$this->period.' days', strtotime($nearestDate->date_start)));
+                        $period_type = $this->period_type ?: 'day';
+                        return date('c', strtotime('+ '.$this->period.' '.$period_type.'s', strtotime($nearestDate->date_start)));
                     }
                 }
             }
