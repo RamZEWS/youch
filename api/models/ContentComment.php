@@ -27,10 +27,12 @@ class ContentComment extends CommonContentComment {
         if(in_array($name, ['my_rating'])){
             $rating = null;
             if(Yii::$app->user->id){
-                $model = CommentRating::find()->where(['user_id' => Yii::$app->user->id, 'comment_id' => $this->id])->one();
+                $model = ContentRating::find()->where(['user_id' => $this->user_id, 'content_id' => $this->content_id])->one();
                 if($model) $rating = $model->rating;
             }
             return $rating;
+        } else if (in_array($name, ['created_at', 'updated_at'])){
+            return date('c', $this->getAttribute($name));
         }
         return parent::__get($name);
     }

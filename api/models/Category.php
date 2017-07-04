@@ -21,6 +21,8 @@ class Category extends CommonCategory {
         if(in_array($name, ['name_ru_RU', 'name_en_US'])){
             $name = LocalizationHelper::getLocaleName($name);
             return $this->getAttribute($name);
+        } else if (in_array($name, ['created_at', 'updated_at'])){
+            return date('c', $this->getAttribute($name));
         }
         return parent::__get($name);
     }

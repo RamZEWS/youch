@@ -17,6 +17,13 @@ class CommentRating extends CommonCommentRating {
         ];
     }
 
+    public function __get($name) {
+        if (in_array($name, ['created_at', 'updated_at'])){
+            return date('c', $this->getAttribute($name));
+        }
+        return parent::__get($name);
+    }
+
     public function getUser(){
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }

@@ -82,6 +82,8 @@ class Content extends CommonContent {
                 if($model) $rating = $model->rating;
             }
             return $rating;
+        } else if (in_array($name, ['created_at', 'updated_at'])){
+            return date('c', $this->getAttribute($name));
         }
         return parent::__get($name);
     }

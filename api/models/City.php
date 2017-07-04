@@ -18,4 +18,11 @@ class City extends CommonCity {
             'lng'
         ];
     }
+
+    public function __get($name) {
+        if (in_array($name, ['created_at', 'updated_at'])){
+            return date('c', $this->getAttribute($name));
+        }
+        return parent::__get($name);
+    }
 }
