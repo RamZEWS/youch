@@ -41,12 +41,14 @@ class Content extends CommonContent {
 
         if($this->is_tour) {
             $fields[] = 'price';
+            $fields[] = 'currency';
             $fields[] = 'period';
             $fields[] = 'period_type';
             $fields[] = 'dates';
         } else {
             $fields[] = 'price_from';
             $fields[] = 'price_to';
+            $fields[] = 'currency';
             $fields[] = 'time_from';
             $fields[] = 'time_to';
         }
@@ -107,6 +109,10 @@ class Content extends CommonContent {
     public function getCategory() {
         return $this->hasOne(Category::className(), ['id' => 'category_id'])
             ->viaTable(ContentCategory::tableName(), ['content_id' => 'id']);
+    }
+    
+    public function getFile(){
+        return $this->hasOne(File::className(), ['id' => 'file_id']);
     }
 
     public function getDays() {

@@ -22,6 +22,8 @@ class TourForm extends Model
     public $period_type;
     public $site;
     public $phone;
+    public $currency;
+    public $file_id;
     public $address;
     public $category;
 
@@ -33,12 +35,13 @@ class TourForm extends Model
     public function rules()
     {
         return [
-            [['title', 'description', 'site', 'phone', 'period_type'], 'string'],
+            [['title', 'currency', 'description', 'site', 'phone', 'period_type'], 'string'],
             [['id', 'period'], 'integer'],
             [['is_free', 'is_tour'], 'boolean'],
             [['price'], 'double'],
             [['address'], 'validateAddress'],
             [['category'], 'validateCategory'],
+            [['file_id'], 'validateFile'],
             ['period_type', 'in', 'range' => ['day', 'hour']],
         ];
     }
@@ -55,7 +58,9 @@ class TourForm extends Model
                 $this->content->period = $this->period;
                 $this->content->period_type = $this->period_type;
                 $this->content->site = $this->site;
+                $this->content->file_id = $this->file_id ?: null;
                 $this->content->phone = $this->phone;
+                $this->content->currency = $this->currency;
                 $this->content->city_id = Yii::$app->user->identity->city_id;
                 if($this->address) {
                     $this->content->address_id = $this->address->id;
@@ -92,6 +97,14 @@ class TourForm extends Model
         $bodyParams = Yii::$app->getRequest()->getBodyParams();
         if(isset($bodyParams['category']['id'])) {
             $this->category = Category::findOne($bodyParams['category']['id']);    
+        }
+        return $this;
+    }
+
+    public function validateFile($attribute, $params){
+        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+        if(isset($bodyParams['file']['id'])) {
+            $this->file_id = intval($bodyParams['file']['id']);
         }
         return $this;
     }

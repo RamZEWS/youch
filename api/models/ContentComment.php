@@ -71,12 +71,7 @@ class ContentComment extends CommonContentComment {
     }
 
     public function getFiles(){
-        $models = CommentFiles::find()->where(['comment_id' => $this->id])->all();
-        if($models) {
-            $images = [];
-            foreach($models as $m) $images[] = implode('', [$m->file_base_url, $m->file_url]);
-            return $images;
-        }
-        return null;
+        return $this->hasMany(File::className(), ['id' => 'file_id'])
+            ->viaTable(CommentFiles::tableName(), ['comment_id' => 'id']);
     }
 }

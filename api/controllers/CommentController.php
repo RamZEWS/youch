@@ -111,37 +111,4 @@ class CommentController extends BaseAuthController {
         }
         return $model;
     }
-
-    public function actionImage($id){
-        $comment = ContentComment::findOne($id);
-        if($comment) {
-            $images = null;
-            $model = new UploadForm();
-            $model->files = UploadedFile::getInstancesByName('file');
-            if ($model->files && $model->validate()) {
-                $images = $model->saveImage('/upload/comments/', true);
-            }
-            if(!$images) {
-                return $model;
-            } else {
-                $models = CommentFiles::find()->where(['comment_id' => $comment->id])->all();
-                if($models) {
-                    foreach($models as $m) {
-                        $file = implode('', [$_SERVER['DOCUMENT_ROOT'], $m->file_base_url, $m->file_url]);
-                        if(file_exists($file)) {
-                            unlink($file);
-                        }
-                    }
-                    CommentFiles::deleteAll(['comment_id' => $comment->id]);
-                }
-                foreach($images as $img) {
-                    $model = new CommentFiles(['comment_id' => $comment->id]);
-                    $model->file_base_url = $img['base_url'];
-                    $model->file_url = $img['file_name'];
-                    $model->save();
-                }
-                return ContentComment::findOne($id);
-            }
-        }
-    }
 }

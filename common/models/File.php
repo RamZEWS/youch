@@ -8,19 +8,19 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
- * @property integer $comment_id
- * @property integer $file_id
+ * @property string $file_base_url
+ * @property string $file_url
  * @property integer $created_at
  * @property integer $updated_at
  */
-class CommentFiles extends ActiveRecord
+class File extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%comment_files}}';
+        return '{{%file}}';
     }
 
     /**
@@ -39,15 +39,7 @@ class CommentFiles extends ActiveRecord
     public function rules()
     {
         return [
-            [['comment_id', 'file_id'], 'integer']
+            [['file_base_url', 'file_url'], 'string']
         ];
-    }
-
-    public function getComment() {
-        return $this->hasOne(ContentComment::className(), ['id' => 'comment_id']);
-    }
-
-    public function getFile() {
-        return $this->hasOne(File::className(), ['id' => 'file_id']);
     }
 }

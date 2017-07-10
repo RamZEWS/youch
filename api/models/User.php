@@ -45,8 +45,11 @@ class User extends CommonUser {
     }
 
     public function getAvatar(){
-        if($this->avatar_url) {
-            return implode('/', [$this->avatar_base_url, $this->avatar_url]);
+        if($this->avatar_id) {
+            $file = File::findOne($this->avatar_id);
+            if($file) {
+                return $file->path;
+            }
         }
         return null;
     }

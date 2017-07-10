@@ -11,6 +11,7 @@ use api\models\Content;
 use api\models\ContentRating;
 use api\models\ContentComment;
 use api\models\User;
+use api\models\File;
 use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 use common\models\forms\UploadForm;
@@ -22,11 +23,11 @@ class EventController extends BaseAuthActiveController {
             'class' => AccessControl::className(),
             'rules' => [
                 [
-                    'actions' => ['index', 'view', 'get-comments', 'user'],
+                    'actions' => ['index', 'view', 'get-comments', 'user', 'recommended'],
                     'allow' => true
                 ],
                 [
-                    'actions' => ['save', 'add-comment', 'add-mark', 'image', 'delete-image'],
+                    'actions' => ['save', 'add-comment', 'add-mark', 'delete-image'],
                     'allow' => true,
                     'roles' => ['@']
                 ],
@@ -43,8 +44,10 @@ class EventController extends BaseAuthActiveController {
                 'user' => ['GET'],
                 'get-comments' => ['GET'],
                 'save' => ['POST'],
-		'image' => ['POST'],
-		'delete-image' => ['POST']
+                'delete-image' => ['POST'],
+                'add-comment' => ['POST'],
+                'add-mark' => ['POST'],
+                'recommended' => ['GET']
             ],
         ];
 
@@ -93,43 +96,20 @@ class EventController extends BaseAuthActiveController {
         return ['pagination' => $pagination, 'models' => $activeData->getModels()];
     }
 
-    public function actionImage($id){
-        $content = $this->findContent($id);
-        if($content) {
-            $image = null;
-            $model = new UploadForm();
-            $model->file = UploadedFile::getInstanceByName('file');
-            if ($model->file && $model->validate()) {
-                $image = $model->saveImage('/upload/content/');
-            }
-            if(!$image) {
-                return $model;
-            } else {
-                if($content->file_url) {
-                    $file = implode('', [$_SERVER['DOCUMENT_ROOT'], $content->file_base_url, $content->file_url]);
-                    if(file_exists($file)) {
-                        unlink($file);
-                    }
-                }
-                $content->file_base_url = $image['base_url'];
-                $content->file_url = $image['file_name'];
-                $content->save();
-                return $content;
-            }
-        }
-    }
-
     public function actionDeleteImage($id){
         $content = $this->findContent($id);
         if($content) {
-            if($content->file_url) {
-                $file = implode('', [$_SERVER['DOCUMENT_ROOT'], $content->file_base_url, $content->file_url]);
-                if(file_exists($file)) {
-                    unlink($file);
+            if($content->file_id) {
+                $file = File::findOne($content->file_id);
+                if($file) {
+                    $path = implode('', [$_SERVER['DOCUMENT_ROOT'], $file->file_base_url, $file->file_url]);
+                    if(file_exists($path)) {
+                        unlink($path);
+                    }
+                    $file->delete();
                 }
             }
-            $content->file_base_url = null;
-            $content->file_url = null;
+            $content->file_id = null;
             $content->save();
             return $content;
         }
@@ -140,6 +120,15 @@ class EventController extends BaseAuthActiveController {
         $model = new ContentComment();
         $model->load($bodyParams, '');
         if ($model->validate() && $model->save()) {
+            $files = isset($bodyParams['files']) ? $bodyParams['files'] : false;
+            if($files) {
+                foreach($files as $f) {
+                    if($f['id']) {
+                        $model = new CommentFiles(['comment_id' => $comment->id, 'file_id' => $f['id']]);
+                        $model->save();
+                    }
+                }
+            }
             return $this->actionGetComments($model->content_id);
         } else {
             return $model;
@@ -173,6 +162,20 @@ class EventController extends BaseAuthActiveController {
         if($category_id) {
             $activeData->query->joinWith('categories', true)->andFilterWhere(['content_category.category_id' => $category_id]);
         }
+
+        $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
+        return ['pagination' => $pagination, 'models' => $activeData->getModels()];
+    }
+
+    public function actionRecommended($page = 1, $perpage = 10){
+        $activeData = new ActiveDataProvider([
+            'query' => Content::find(),
+            'pagination' => [
+                'defaultPageSize' => $perpage,
+                'validatePage' => false
+            ],
+        ]);
+        $activeData->query->where(['status' => Content::STATUS_ACTIVE, 'is_tour' => 1])->orderBy(['rating' => SORT_DESC]);
 
         $pagination = $this->getPagination($activeData->getTotalCount(), $page, $perpage);
         return ['pagination' => $pagination, 'models' => $activeData->getModels()];

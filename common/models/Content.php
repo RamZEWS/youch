@@ -18,6 +18,7 @@ use yii\db\ActiveRecord;
  * @property integer $is_free
  * @property integer $is_tour
  * @property integer $period
+ * @property integer $file_id
  * @property string $period_type
  * @property datetime $date_from
  * @property datetime $date_to
@@ -25,8 +26,7 @@ use yii\db\ActiveRecord;
  * @property string $time_to
  * @property string $site
  * @property string $phone
- * @property string $file_base_url
- * @property string $file_url
+ * @property string $currency
  * @property integer $city_id
  * @property integer $address_id
  * @property integer $created_at
@@ -62,8 +62,8 @@ class Content extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'description', 'site', 'phone', 'file_base_url', 'file_url', 'time_from', 'time_to', 'period_type'], 'string'],
-            [['user_id', 'city_id', 'address_id', 'status', 'period'], 'integer'],
+            [['title', 'description', 'site', 'phone', 'time_from', 'time_to', 'period_type', 'currency'], 'string'],
+            [['user_id', 'city_id', 'file_id', 'address_id', 'status', 'period'], 'integer'],
             [['price_from', 'price_to', 'rating'], 'double'],
             [['date_from', 'date_to'], 'safe'],
             ['user_id', 'default', 'value' => Yii::$app->user->id],
@@ -85,9 +85,6 @@ class Content extends ActiveRecord
     }
 
     public function getFile(){
-        if($this->file_base_url) {
-            return implode('', [$this->file_base_url, $this->file_url]);
-        }
-        return null;
+        return $this->hasOne(File::className(), ['id' => 'file_id']);
     }
 }
